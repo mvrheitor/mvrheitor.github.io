@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Portfólio de Fotografia</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1d1d1f;
+            color: #f5f5f7;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px);
+            transition: opacity 1s;
+            opacity: 0;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #f5f5f7;
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .photo {
+            margin: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: calc(33% - 20px);
+            box-sizing: border-box;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .photo:hover {
+            transform: scale(1.05);
+        }
+        .photo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .photo-info {
+            padding: 15px;
+        }
+        .photo-info p {
+            margin: 5px 0;
+        }
+        .photo-info .caption {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #f5f5f7;
+        }
+        .photo-info .exif {
+            font-size: 0.875rem;
+            color: #a6a6a6;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+        footer a {
+            color: #007aff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.25rem;
+        }
+        .fullscreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow: hidden;
+        }
+        .fullscreen img {
+            max-width: 90%;
+            max-height: 90%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+            cursor: zoom-in;
+        }
+        .fullscreen.active {
+            display: flex;
+            animation: fadeIn 0.5s;
+        }
+        .fullscreen.zoomed img {
+            cursor: zoom-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="background" id="background1"></div>
+<div class="background" id="background2"></div>
+
+<header>
+    <h1>Meu Portfólio de Fotografia</h1>
+</header>
+
+<main>
+    <!-- Exemplo de uma fotografia -->
+    <div class="photo" onclick="openFullscreen(this)">
+        <img src="libélula.png" alt="Legenda da foto">
+        <div class="photo-info">
+            <p class="caption">No misticismo, essas criaturas aladas são mensageiras de sabedoria e iluminação, um lembrete sutil da efemeridade da vida e da beleza encontrada na mudança.</p>
+            <p class="exif">Samsung Galaxy A52 5G<br>f/1,8 | 1/120s | 24mm | ISO 101</p>
+        </div>
+    </div>
+	
+    <div class="photo" onclick="openFullscreen(this)">
+        <img src="SGCAM_20240316_130323227.jpg" alt="Legenda da foto">
+        <div class="photo-info">
+            <p class="caption">A verdadeira beleza reside nos detalhes que muitas vezes ignoramos. Nome da flor: Hibiscus</p>
+            <p class="exif">Samsung Galaxy A52 5G<br>f/1,8 | 1/376s | 24mm | ISO 40</p>
+        </div>
+    </div>
+	
+	</div>
+	
+    <div class="photo" onclick="openFullscreen(this)">
+        <img src="gato-3.png" alt="Legenda da foto">
+        <div class="photo-info">
+            <p class="caption">Gatinhos da @mabelfrickefotografia (Instagram)
+Um deles tem olhos de cores diferentes!
+</p>
+            <p class="exif">Samsung Galaxy A52 5G
+f/1,8 | 1/120s | 24mm | ISO 645</p>
+        </div>
+    </div>
+	
+	<div class="photo" onclick="openFullscreen(this)">
+        <img src="Mamangava.png" alt="Legenda da foto">
+        <div class="photo-info">
+            <p class="caption">Não importa o quão pequeno você se sinta, você sempre pode fazer a diferença no mundo. Assim como a abelha que poliniza as flores e sustenta a vida, você também tem um propósito e uma missão.</p>
+            <p class="exif">Samsung Galaxy A52 5G
+f/1,8 | 1/128s | 24mm | ISO 30</p>
+        </div>
+    </div>
+	
+	<div class="photo" onclick="openFullscreen(this)">
+        <img src="museu_do_ipiranga.jpg" alt="Legenda da foto">
+        <div class="photo-info">
+            <p class="caption">O Museu do Ipiranga é mais do que um monumento histórico. É um símbolo de uma nação que nasceu da luta pela liberdade e pela independência.</p>
+            <p class="exif">Samsung Galaxy A52 5G
+f/1,8 | 1/1500s | 24mm | ISO 20</p>
+        </div>
+    </div>
+	
+	<div class="photo" onclick="openFullscreen(this)">
+        <img src="monumento_do_ipiranga.jpg" alt="Legenda da foto">
+        <div class="photo-info">
+            <p class="caption">Neste lugar histórico, onde o Brasil nasceu como nação, o tempo parece parar. As nuvens carregadas testemunham a grandeza do monumento que homenageia os heróis da independência. As pessoas que o visitam sentem a força do passado e o desafio do futuro. Neste solo sagrado, ecoa o grito que mudou o destino de um povo: Independência ou Morte!</p>
+            <p class="exif">Samsung Galaxy A52 5G
+f/1,8 | 1/1250s | 24mm | ISO 29</p>
+        </div>
+    </div>
+    <!-- Repita o bloco acima para cada fotografia -->
+</main>
+
+<footer>
+    <a href="URL_DO_SEU_FACEBOOK" target="_blank">Facebook</a>
+    <a href="URL_DO_SEU_INSTAGRAM" target="_blank">Instagram</a>
+    <a href="URL_DO_SEU_TWITTER" target="_blank">Twitter</a>
+</footer>
+
+<div class="fullscreen" id="fullscreen" onclick="toggleZoom(event)">
+    <img id="fullscreenImg" src="" alt="Foto em tela cheia">
+</div>
+
+<script>
+    let currentBackground = 1;
+    const background1 = document.getElementById('background1');
+    const background2 = document.getElementById('background2');
+    const photos = document.querySelectorAll('.photo img');
+    const imgSrcs = Array.from(photos).map(photo => photo.src);
+
+    function changeBackground() {
+        const nextBackground = currentBackground === 1 ? background2 : background1;
+        nextBackground.style.backgroundImage = `url(${imgSrcs[Math.floor(Math.random() * imgSrcs.length)]})`;
+        nextBackground.style.opacity = '1';
+        if (currentBackground === 1) {
+            background1.style.opacity = '0';
+            currentBackground = 2;
+        } else {
+            background2.style.opacity = '0';
+            currentBackground = 1;
+        }
+    }
+
+    setInterval(changeBackground, 5000); // Muda a cada 5 segundos
+    changeBackground(); // Chama imediatamente para definir o primeiro fundo
+
+    function openFullscreen(element) {
+        const imgSrc = element.querySelector('img').src;
+        const fullscreenDiv = document.getElementById('fullscreen');
+        const fullscreenImg = document.getElementById('fullscreenImg');
+        fullscreenImg.src = imgSrc;
+        fullscreenDiv.classList.add('active');
+    }
+
+    function closeFullscreen() {
+        const fullscreenDiv = document.getElementById('fullscreen');
+        fullscreenDiv.classList.remove('active', 'zoomed');
+        const fullscreenImg = document.getElementById('fullscreenImg');
+        fullscreenImg.style.transform = 'scale(1)';
+    }
+
+    function toggleZoom(event) {
+        const fullscreenDiv = document.getElementById('fullscreen');
+        const fullscreenImg = document.getElementById('fullscreenImg');
+        if (fullscreenDiv.classList.contains('zoomed')) {
+            fullscreenImg.style.transform = 'scale(1)';
+            fullscreenDiv.classList.remove('zoomed');
+        } else {
+            fullscreenImg.style.transform = 'scale(2)';
+            fullscreenDiv.classList.add('zoomed');
+        }
+    }
+
+    document.getElementById('fullscreen').addEventListener('click', (event) => {
+        if (event.target.id === 'fullscreen') {
+            closeFullscreen();
+        }
+    });
+</script>
+
+</body>
+</html>

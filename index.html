@@ -102,11 +102,12 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            overflow: hidden;
+            overflow-y: auto;
+            flex-direction: column;
         }
         .fullscreen img {
             max-width: 90%;
-            max-height: 90%;
+            max-height: 80%;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s;
             cursor: zoom-in;
@@ -118,12 +119,27 @@
         .fullscreen.zoomed img {
             cursor: zoom-out;
         }
+        .fullscreen .info {
+            color: #f5f5f7;
+            padding: 20px;
+            width: 90%;
+            background: rgba(0, 0, 0, 0.7);
+            margin-top: 10px;
+            text-align: center;
+            border-radius: 10px;
+        }
         @keyframes fadeIn {
             from {
                 opacity: 0;
             }
             to {
                 opacity: 1;
+            }
+        }
+        /* Media query for mobile devices */
+        @media (max-width: 768px) {
+            .photo {
+                width: calc(100% - 20px);
             }
         }
     </style>
@@ -198,13 +214,12 @@ f/1,8 | 1/1250s | 24mm | ISO 29</p>
 </main>
 
 <footer>
-    <a href="URL_DO_SEU_FACEBOOK" target="_blank">Facebook</a>
-    <a href="URL_DO_SEU_INSTAGRAM" target="_blank">Instagram</a>
-    <a href="URL_DO_SEU_TWITTER" target="_blank">Twitter</a>
+    <a href="https://www.instagram.com/mvrheitor/" target="_blank">Instagram</a>
 </footer>
 
 <div class="fullscreen" id="fullscreen" onclick="toggleZoom(event)">
     <img id="fullscreenImg" src="" alt="Foto em tela cheia">
+    <div class="info" id="fullscreenInfo"></div>
 </div>
 
 <script>
@@ -232,10 +247,16 @@ f/1,8 | 1/1250s | 24mm | ISO 29</p>
 
     function openFullscreen(element) {
         const imgSrc = element.querySelector('img').src;
+        const caption = element.querySelector('.caption').innerText;
+        const exif = element.querySelector('.exif').innerText;
         const fullscreenDiv = document.getElementById('fullscreen');
         const fullscreenImg = document.getElementById('fullscreenImg');
+        const fullscreenInfo = document.getElementById('fullscreenInfo');
+        
         fullscreenImg.src = imgSrc;
+        fullscreenInfo.innerHTML = `<p>${caption}</p><p>${exif}</p>`;
         fullscreenDiv.classList.add('active');
+        document.body.style.overflow = 'hidden';  // Prevent scrolling in the background
     }
 
     function closeFullscreen() {
@@ -243,6 +264,7 @@ f/1,8 | 1/1250s | 24mm | ISO 29</p>
         fullscreenDiv.classList.remove('active', 'zoomed');
         const fullscreenImg = document.getElementById('fullscreenImg');
         fullscreenImg.style.transform = 'scale(1)';
+        document.body.style.overflow = 'auto';  // Restore scrolling
     }
 
     function toggleZoom(event) {

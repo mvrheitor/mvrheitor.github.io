@@ -11,6 +11,7 @@
             padding: 0;
             background-color: #1d1d1f;
             color: #f5f5f7;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
         .background {
             position: fixed;
@@ -102,22 +103,20 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            overflow-y: auto;
+            overflow: hidden;
             flex-direction: column;
         }
         .fullscreen img {
-            max-width: 90%;
-            max-height: 80%;
+            max-width: 100%;
+            max-height: 100%;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s;
-            cursor: zoom-in;
+            cursor: grab;
+            will-change: transform;
         }
         .fullscreen.active {
             display: flex;
             animation: fadeIn 0.5s;
-        }
-        .fullscreen.zoomed img {
-            cursor: zoom-out;
         }
         .fullscreen .info {
             color: #f5f5f7;
@@ -247,10 +246,12 @@ f/1,8 | 1/1828s | 24mm | ISO 25</p>
 </main>
 
 <footer>
-    <a href="https://www.instagram.com/mvrheitor/" target="_blank">Instagram</a>
+    <a href="URL_DO_SEU_FACEBOOK" target="_blank">Facebook</a>
+    <a href="URL_DO_SEU_INSTAGRAM" target="_blank">Instagram</a>
+    <a href="URL_DO_SEU_TWITTER" target="_blank">Twitter</a>
 </footer>
 
-<div class="fullscreen" id="fullscreen" onclick="toggleZoom(event)">
+<div class="fullscreen" id="fullscreen" onwheel="zoom(event)">
     <img id="fullscreenImg" src="" alt="Foto em tela cheia">
     <div class="info" id="fullscreenInfo"></div>
 </div>
@@ -294,29 +295,99 @@ f/1,8 | 1/1828s | 24mm | ISO 25</p>
 
     function closeFullscreen() {
         const fullscreenDiv = document.getElementById('fullscreen');
-        fullscreenDiv.classList.remove('active', 'zoomed');
+        fullscreenDiv.classList.remove('active');
         const fullscreenImg = document.getElementById('fullscreenImg');
         fullscreenImg.style.transform = 'scale(1)';
+        fullscreenImg.style.top = '50%';
+        fullscreenImg.style.left = '50%';
+        fullscreenImg.style.transform = 'translate(-50%, -50%) scale(1)';
         document.body.style.overflow = 'auto';  // Restore scrolling
     }
 
-    function toggleZoom(event) {
-        const fullscreenDiv = document.getElementById('fullscreen');
-        const fullscreenImg = document.getElementById('fullscreenImg');
-        if (fullscreenDiv.classList.contains('zoomed')) {
-            fullscreenImg.style.transform = 'scale(1)';
-            fullscreenDiv.classList.remove('zoomed');
-        } else {
-            fullscreenImg.style.transform = 'scale(2)';
-            fullscreenDiv.classList.add('zoomed');
-        }
+    let scale = 1;
+    let originX = 0.5;
+    let originY = 0.5;
+
+    function zoom(event) {
+        event.preventDefault();
+        const img = document.getElementById('fullscreenImg');
+        const rect = img.getBoundingClientRect();
+        const offsetX = event.clientX - rect.left;
+        const offsetY = event.clientY - rect.top;
+        const delta = event.deltaY > 0 ? -0.1 : 0.1;
+        scale += delta;
+        scale = Math.min(Math.max(1, scale), 3); // Limit zoom scale between 1 and 3
+
+        originX = offsetX / rect.width;
+        originY = offsetY / rect.height;
+
+        img.style.transformOrigin = `${originX * 100}% ${originY * 100}%`;
+        img.style.transform = `translate(-50%, -50%) scale(${scale})`;
     }
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    document.getElementById('fullscreenImg').addEventListener('mousedown', (event) => {
+        isDragging = true;
+        startX = event.clientX - currentX;
+        startY = event.clientY - currentY;
+        event.target.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (event) => {
+        if (isDragging) {
+            currentX = event.clientX - startX;
+            currentY = event.clientY - startY;
+            event.target.style.cursor = 'grabbing';
+            const img = document.getElementById('fullscreenImg');
+            img.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        const img = document.getElementById('fullscreenImg');
+        img.style.cursor = 'grab';
+    });
 
     document.getElementById('fullscreen').addEventListener('click', (event) => {
         if (event.target.id === 'fullscreen') {
             closeFullscreen();
         }
     });
+
+    // Touch event handling for pinch-to-zoom and drag
+    let initialPinchDistance = null;
+    let initialScale = 1;
+
+    document.getElementById('fullscreenImg').addEventListener('touchstart', (event) => {
+        if (event.touches.length === 2) {
+            initialPinchDistance = getPinchDistance(event.touches);
+            initialScale = scale;
+        }
+    });
+
+    document.getElementById('fullscreenImg').addEventListener('touchmove', (event) => {
+        if (event.touches.length === 2) {
+            event.preventDefault();
+            const pinchDistance = getPinchDistance(event.touches);
+            scale = initialScale * (pinchDistance / initialPinchDistance);
+            scale = Math.min(Math.max(1, scale), 3); // Limit zoom scale between 1 and 3
+            const img = document.getElementById('fullscreenImg');
+            img.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        }
+    });
+
+    function getPinchDistance(touches) {
+        const [touch1, touch2] = touches;
+        const dx = touch2.clientX - touch1.clientX;
+        const dy = touch2.clientY - touch1.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 </script>
 
 </body>

@@ -6,11 +6,9 @@ function verificarChave() {
     const chaveCriptografadaDigitada = btoa(chaveDigitada);
 
     if (chaveCriptografadaDigitada === chaveCriptografada) {
-        // Chave correta
         document.getElementById('mensagem').innerText = '';
-        window.location.href = 'biblioteca.php';
+        window.location.href = 'biblioteca.html';
     } else {
-        // Chave incorreta
         document.getElementById('mensagem').innerText = 'Chave incorreta! Tente novamente.';
     }
 }
@@ -28,3 +26,15 @@ function buscarLivro() {
         }
     });
 }
+
+async function selecionarPastaLivros() {
+    try {
+        const dirHandle = await window.showDirectoryPicker();
+        const listaLivros = document.getElementById('lista-livros');
+        listaLivros.innerHTML = '';  // Limpar a lista anterior
+
+        for await (const [nomeArquivo, handle] of dirHandle.entries()) {
+            if (handle.kind === 'file' && nomeArquivo.endsWith('.pdf')) {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(await handle.getFile());
+                link.innerText = nomeArq

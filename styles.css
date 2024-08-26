@@ -46,6 +46,7 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    margin-bottom: 20px;
 }
 
 button:hover {
@@ -68,11 +69,3 @@ button:hover {
 #mensagem {
     margin-top: 15px;
     color: red;
-}
-
-#pesquisa {
-    background-color: #fff3cd;
-    color: #5e503f;
-    border: 2px solid #d9b382;
-    border-radius: 8px;
-}

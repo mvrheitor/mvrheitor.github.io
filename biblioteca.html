@@ -1,7 +1,3 @@
-<?php
-$livros = glob("Livros/*.pdf");
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -13,11 +9,11 @@ $livros = glob("Livros/*.pdf");
 <body>
     <div class="container">
         <h1>Biblioteca Privada</h1>
-        <input type="text" id="pesquisa" placeholder="Buscar por um livro..." onkeyup="buscarLivro()">
+        <p>Selecione a pasta que contém seus livros:</p>
+        <button id="selecionar-pasta" onclick="selecionarPastaLivros()">Selecionar Pasta</button>
+        <input type="text" id="pesquisa" placeholder="Buscar por um livro..." onkeyup="buscarLivro()" disabled>
         <div id="lista-livros">
-            <?php foreach($livros as $livro): ?>
-                <a href="<?= $livro ?>" target="_blank"><?= basename($livro, ".pdf") ?></a>
-            <?php endforeach; ?>
+            <!-- Livros serão carregados aqui -->
         </div>
     </div>
     <script src="script.js"></script>

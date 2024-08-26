@@ -8,12 +8,37 @@
 </head>
 <body>
     <div class="container">
-        <h1>Biblioteca Privada</h1>
-        <p>Selecione a pasta que contém seus livros:</p>
-        <button id="selecionar-pasta" onclick="selecionarPastaLivros()">Selecionar Pasta</button>
-        <input type="text" id="pesquisa" placeholder="Buscar por um livro..." onkeyup="buscarLivro()" disabled>
-        <div id="lista-livros">
-            <!-- Livros serão carregados aqui -->
+        <h1>Biblioteca de Babel</h1>
+        <input type="text" id="pesquisa" placeholder="Buscar por um livro..." onkeyup="buscarLivro()">
+
+        <!-- Categoria: Ficção -->
+        <div class="categoria">
+            <h2>Ficção</h2>
+            <div id="lista-livros-ficcao">
+                <a href="Livros/Livro1.pdf" target="_blank">O Grande Gatsby</a>
+                <a href="Livros/Livro2.pdf" target="_blank">Moby Dick</a>
+                <!-- Adicione mais livros de ficção -->
+            </div>
+        </div>
+
+        <!-- Categoria: Não-Ficção -->
+        <div class="categoria">
+            <h2>Não-Ficção</h2>
+            <div id="lista-livros-nao-ficcao">
+                <a href="Livros/Livro3.pdf" target="_blank">Sapiens: Uma Breve História da Humanidade</a>
+                <a href="Livros/Livro4.pdf" target="_blank">Educated</a>
+                <!-- Adicione mais livros de não-ficção -->
+            </div>
+        </div>
+
+        <!-- Categoria: Clássicos -->
+        <div class="categoria">
+            <h2>Clássicos</h2>
+            <div id="lista-livros-classicos">
+                <a href="Livros/Livro5.pdf" target="_blank">Dom Quixote</a>
+                <a href="Livros/Livro6.pdf" target="_blank">A Divina Comédia</a>
+                <!-- Adicione mais livros clássicos -->
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

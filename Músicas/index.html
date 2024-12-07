@@ -88,29 +88,43 @@
   </div>
 
   <script>
-    // Carregamento das músicas e exibição na lista
+    // Função para carregar e exibir as músicas
     async function loadMusicas() {
-      const response = await fetch('Musicas.txt'); // Caminho atualizado sem acento
-      const content = await response.text();
-      const lines = content.split('\n');
-      const lista = document.getElementById('musicas-lista');
-      lista.innerHTML = ''; // Limpa conteúdo anterior
+      try {
+        const response = await fetch('Musicas.txt'); // Arquivo de músicas
+        if (!response.ok) throw new Error('Erro ao carregar o arquivo.');
+        
+        const content = await response.text();
+        const lines = content.split('\n'); // Divide por linha
+        const lista = document.getElementById('musicas-lista');
+        lista.innerHTML = ''; // Limpa conteúdo anterior
 
-      lines.forEach((line, index) => {
-        if (line.trim()) { // Ignora linhas vazias
-          const li = document.createElement('li');
-          const [musica, artista] = line.split(' - '); // Divide no " por "
-          li.innerHTML = `<span>${index + 1}.</span> <strong>${musica || 'Título Desconhecido'}</strong> — ${artista || 'Artista Desconhecido'}`;
-          lista.appendChild(li);
-        }
-      });
+        lines.forEach((line, index) => {
+          if (line.trim()) { // Ignora linhas vazias
+            const li = document.createElement('li');
+
+            // Tenta dividir por diferentes delimitadores
+            let [musica, artista] = line.split(' por ');
+            if (!artista) { // Se "por" não funcionar, tenta com " - "
+              [musica, artista] = line.split(' - ');
+            }
+
+            // Normaliza valores ausentes
+            musica = musica?.trim() || 'Título Desconhecido';
+            artista = artista?.trim() || 'Artista Desconhecido';
+
+            li.innerHTML = `<span>${index + 1}.</span> <strong>${musica}</strong> — ${artista}`;
+            lista.appendChild(li);
+          }
+        });
+      } catch (error) {
+        const lista = document.getElementById('musicas-lista');
+        lista.innerHTML = '<li>Erro ao carregar o arquivo Musicas.txt.</li>';
+      }
     }
 
     // Carrega as músicas ao iniciar
-    loadMusicas().catch(() => {
-      const lista = document.getElementById('musicas-lista');
-      lista.innerHTML = '<li>Erro ao carregar o arquivo Musicas.txt.</li>';
-    });
+    loadMusicas();
   </script>
 </body>
 </html>

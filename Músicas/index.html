@@ -99,7 +99,7 @@
       lines.forEach((line, index) => {
         if (line.trim()) { // Ignora linhas vazias
           const li = document.createElement('li');
-          const [musica, artista] = line.split(' por '); // Divide no " por "
+          const [musica, artista] = line.split(' - '); // Divide no " por "
           li.innerHTML = `<span>${index + 1}.</span> <strong>${musica || 'Título Desconhecido'}</strong> — ${artista || 'Artista Desconhecido'}`;
           lista.appendChild(li);
         }

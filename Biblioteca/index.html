@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Biblioteca Privada</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Biblioteca de Babel Particular</h1>
+        <input type="text" id="pesquisa" placeholder="Buscar por um livro..." onkeyup="buscarLivro()">
+
+        <!-- Categoria: Ficção -->
+        <div class="categoria">
+            <h2>Ficção</h2>
+            <div id="lista-livros-ficcao">
+                <a href="Livros/fahrenheit-451-ray-bradbury.pdf" target="_blank">Fahrenheit 451</a>
+                <a href="Livros/Corpos Secos.pdf" target="_blank">Corpos Secos</a>
+				<a href="Livros/2001 Odisséia No Espaço.pdf" target="_blank">2001: Uma odisséia no espaço</a>
+				<a href="Livros/O Profeta.pdf" target="_blank">O Profeta</a>
+				<a href="Livros/o-problema-dos-tres-corpos-cixin-liu_compress.pdf" target="_blank">O Problema dos Três Corpos</a>
+                <!-- Adicione mais livros de ficção -->
+            </div>
+        </div>
+
+        <!-- Categoria: Não-Ficção -->
+        <div class="categoria">
+            <h2>Não-Ficção</h2>
+            <div id="lista-livros-nao-ficcao">
+                <a href="Livros/Sapiens Uma Breve História da Humanidade.pdf" target="_blank">Sapiens: Uma Breve História da Humanidade</a>
+                <a href="Livros/Edward Snowden - Eterna vigilância Como montei e desvendei o maior sistema de espionagem  do mundo.pdf" target="_blank">Eterna vigilância: Como montei e desvendei o maior sistema de espionagem do mundo</a>
+                <!-- Adicione mais livros de não-ficção -->
+            </div>
+        </div>
+
+        <!-- Categoria: Clássicos -->
+        <div class="categoria">
+            <h2>Clássicos</h2>
+            <div id="lista-livros-classicos">
+                <a href="Livros/Divina Comédia.pdf" target="_blank">A Divina Comédia</a>
+                <!-- Adicione mais livros clássicos -->
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

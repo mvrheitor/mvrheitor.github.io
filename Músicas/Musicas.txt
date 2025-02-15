@@ -28,7 +28,7 @@ Chariots Of Fire por Vangelis
 What to Do (Bad Day) por Rune Dale
 Engel por Rammstein
 Tchaikovsky: 1812 Overture in E-Flat Major, Op. 49 (Excerpt) por Pyotr Ilyich Tchaikovsky
-1812 Overture por Pyotr Ilyich Tchaikovsky
+Tchaikovsky: 1812 Overture in E-Flat Major, Op. 49 por Pyotr Ilyich Tchaikovsky
 Here Comes The Sun - Remastered 2009 por The Beatles
 Bad Boys Punk Rock Motorcycle Bar por Heaven Tracks Vibes
 Toccata & Fugue in D Minor, BWV 565 por Johann Sebastian Bach
@@ -129,7 +129,7 @@ Venus por Shocking Blue
 Fever por Peggy Lee
 (I'm Not Your) Steppin' Stone - 2006 Remaster por The Monkees
 For Whom The Bell Tolls - Remastered por Metallica
-The Dark Dresses Lightly por AURORA
+When The Dark Dresses Lightly por AURORA
 For All We Know por Ahmad Jamal
 Goodnite por Melody Gardot
 Sunny por James Brown
@@ -910,7 +910,7 @@ Disco por Surf Curse
 Freaks por Surf Curse
 Blue Hotel por Chris Isaak
 Wicked Game por Chris Isaak
-Wonderwall por Oasis
+WONDERWaLL por Oasis
 Aleph - Sped Up por fam0uz
 Solitude - Felsmann + Tiley Reinterpretation por M83
 Aleph por Gesaffelstein
@@ -1011,7 +1011,6 @@ Slow Ride - Edit por Foghat
 Sunshine Of Your Love por Cream
 We Will Rock You - Remastered 2011 por Queen
 Welcome To The Jungle por Guns N' Roses
-Welcome Home por Radical Face
 Payphone por Maroon 5
 Sugar por Maroon 5
 Animals por Maroon 5
@@ -1050,7 +1049,7 @@ La Maritza por Sylvie Vartan
 I Was Made For Lovin' You por KISS
 Forever Young por Alphaville
 Se Essa Rua Fosse Minha por Tomaz Lima
-Waltz Of The Flowers From The Nutcracker por Pyotr Ilyich Tchaikovsky
+Tchaikovsky: The Nutcracker, Op. 71, Act 2: No. 13, Waltz of the Flowers por Pyotr Ilyich Tchaikovsky
 Sweet Dreams (Are Made of This) por Eurythmics
 Rock N Roll Train por AC/DC
 green to blue por daniel.mp3
@@ -1097,9 +1096,9 @@ Curtains por Jackie Vae
 Heavy Is The Hollow Of A Mortal Soul por Aimee deBeer
 Bicycle Race - Remastered 2011 por Queen
 Another Brick in the Wall, Pt. 2 por Pink Floyd
-Piano Sonata No. 16 in C, K.545 "Sonata facile": 1. Allegro por Wolfgang Amadeus Mozart
+Piano Sonata No. 16 in C Major, K. 545 "Sonata facile": I. Allegro por Wolfgang Amadeus Mozart
 La Vie en rose por Édith Piaf
-Carol of the Bells por John Williams
+Carol of the Bells (From "Home Alone" Soundtrack) por John Williams
 Hole in the Sky (2009 Remaster) por Black Sabbath
 Pachelbel: Canon and Gigue in D Major: Canon por Johann Pachelbel
 Great Fairy Fountain (From "Ocarina of Time") por Lucas Cooper
@@ -1157,7 +1156,7 @@ Girl I Love You por Barrington Levy
 | Idea 22 - Best Part (Looped) | ° Slowed + Reverb ° por EL TITO MERK
 プロローグ〜古えの地へ〜 por SIE Sound Team
 Kara Main Theme - Kara por Philip Sheppard
-Beautiful Creatures - Movie version por offical.BVC.music
+Beautiful Creatures por offical.BVC.music
 Bella ciao por Fonola Band
 Happy por Pharrell Williams
 when the devil falls in love por Hakdo
@@ -1166,3 +1165,31 @@ Give A Little Bit por Supertramp
 Cheri Cheri Lady por Modern Talking
 Dance With a Stranger por Yanni
 The Great Gig in the Sky por Pink Floyd
+momentary - choir version por Ólafur Arnalds
+Light My Fire por The Doors
+Time por Hotel Pools
+Waterfall por Toby Fox
+Stairway to Heaven - Remaster por Led Zeppelin
+Good Times Bad Times - 1993 Remaster por Led Zeppelin
+Concerto Grosso in C Minor, Op. 6, No. 8, HWV 326: I. Allemande: Andante por George Frideric Handel
+Diggin Deeper por Will Harrison
+Homage por Mild High Club
+SOS por ABBA
+One por Metallica
+Can't Help Falling in Love por Elvis Presley
+Sunny Afternoon por The Kinks
+VENT'ANNI por Måneskin
+apocalypse por Nursena Yener
+Hungarian Rhapsody No. 2 in C-Sharp Minor, S. 244/2 por Franz Liszt
+Beanie por Chezile
+Construção por Chico Buarque
+Die With A Smile por Lady Gaga
+Happy Nation por Ace of Base
+All That She Wants por Ace of Base
+Love In Portofino por Dalida
+Everybody Knows por Sigrid
+Mein Herz brennt por Rammstein
+Don't Stop Believin' (2022 Remaster) por Journey
+Onde Anda Você por Toquinho
+Garota De Ipanema por Antônio Carlos Jobim
+Welcome Home, Son por Radical Face

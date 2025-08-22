@@ -23,7 +23,7 @@ The Rise and Fall of Bossanova Section I por P C III
 Idea 10 por Gibran Alcocer
 Softcore por The Neighbourhood
 An der schönen blauen Donau, Waltz, Op. 314 por Johann Strauss II
-The Hanging Tree por James Newton Howard
+The Hanging Tree - From "The Hunger Games: Mockingjay" Soundtraclk por James Newton Howard
 Chariots Of Fire por Vangelis
 What to Do (Bad Day) por Rune Dale
 Engel por Rammstein
@@ -224,14 +224,14 @@ Gone por Jack Barksdale
 Revival Song No. 4 por Jack Barksdale
 Before the Devil Knows por Jack Barksdale
 Have You Ever Seen The Rain por Creedence Clearwater Revival
-Overture (Suite) No. 2 in B Minor, BWV 1067: VII. Badinerie por Johann Sebastian Bach
+Orchestral Suite No. 2 in B Minor, BWV 1067: VII. Badinerie por Johann Sebastian Bach
 Night Moves por Bob Seger
 Rigoletto, Act III: La donna è mobile por Giuseppe Verdi
 Oh Death por Spiros Maus
 O' Death - Haunted Version por Bobby Bass
 Sechs Klavierstücke, Op. 118: II. Intermezzo in A Major por Johannes Brahms
 Skyfall por Adele
-Totentanz, S126/R457 por Franz Liszt
+Totentanz, S. 126/R. 457 por Franz Liszt
 Masquerade Suite: Maskarad (Masquerade): I. Waltz por St. Petersburg State Symphony Orchestra
 Davy Jones por Hans Zimmer
 Who por melergy
@@ -307,7 +307,7 @@ Free Bird por Lynyrd Skynyrd
 Seize the Day por Avenged Sevenfold
 Trashed and Scattered por Avenged Sevenfold
 Piano Concerto No. 21 in C Major, K. 467: II. Andante por Wolfgang Amadeus Mozart
-21 Hungarian Dances, WoO 1 (version for orchestra): Hungarian Dance No. 5 (orch. Schmeling) por Johannes Brahms
+21 Hungarian Dances for Orchestra, WoO 1: No. 5, Allegro (Arr. A. Parlow) por Johannes Brahms
 Roxanne por The Police
 18 and Life por Skid Row
 Eleanor Rigby por The Beatles
@@ -415,17 +415,17 @@ Handel / Orch. Hale: Keyboard Suite No. 4 in D Minor, HWV 437: III. Sarabande po
 The Arrival of the Queen of Sheba - from Solomon por George Frideric Handel
 Cello Suite No. 1 in G Major, BWV 1007: I. Prélude por Johann Sebastian Bach
 The Godfather Theme por Voidoid
-Gavotte in D Major, "Rosine" (arr. for violin and piano) por Francois-Joseph Gossec
+Gavotte in D Major "Rosine" (Arr. for Violin & Piano) por Francois-Joseph Gossec
 Allegretto from Symphony No. 7 por Ludwig van Beethoven
 8 Humoresques, Op. 101, B. 187: No. 7, Poco lento e grazioso (Transcribed by Oscar Morawetz for Violin, Cello & Orchestra) por Antonín Dvořák
 Symphony No.25 In G Minor, K.183: 1. Allegro Con Brio por Wolfgang Amadeus Mozart
 Piano Quartet No. 1 in G Minor, K. 478: III. Rondo (Allegro moderato) - Live At Pierre Boulez Saal por Wolfgang Amadeus Mozart
 Pavane, Op. 50 por Gabriel Fauré
-Klarinettenkonzert A-Dur, K. 622: 2. Adagio (Jenseits von Afrika): II. Adagio por Wolfgang Amadeus Mozart
+Clarinet Concerto in A Major, K. 622: II. Adagio por Wolfgang Amadeus Mozart
 Eine kleine Nachtmusik, K. 525: II. Romanza - Andante por Gaetano Soliman
 Première Gymnopédie por Erik Satie
 Requiem In D Minor, K.626: 3. Sequentia: Lacrimosa por Wolfgang Amadeus Mozart
-Die Walkure, Act III: Ride of the Valkyries por Richard Wagner
+Die Walküre, Act III: Ride of the Valkyries por Richard Wagner
 Jazz Suite No. 2: VI. Waltz 2 por Dmitri Shostakovich
 Violin Sonata No. 26 in Bb, K. 37 por Wolfgang Amadeus Mozart
 The Conflict Of The Mind por AURORA
@@ -818,7 +818,7 @@ Viva La Vida por Coldplay
 Clocks por Coldplay
 Love Don't Let Me Go por Angelina Jordan
 Spring (La Primavera) Op.8 No.1 E Major: Allegro por Antonio Vivaldi
-Serenade No. 13 in G Major, K. 525, "Eine kleine Nachtmusik": I. Allegro por Wolfgang Amadeus Mozart
+Serenade No. 13 in G Major, K. 525 "Eine kleine Nachtmusik": I. Allegro (Featured in "Nikita") por Wolfgang Amadeus Mozart
 In Essence (Slowed) por Ka$tro
 Black Dog - Remaster por Led Zeppelin
 Immigrant Song - Remaster por Led Zeppelin
@@ -1125,7 +1125,6 @@ The Thrill Is Gone por B.B. King
 Don't Let Me Be Misunderstood por The Animals
 Rock And Roll All Nite por KISS
 Aqualung por Jethro Tull
-Ordinary por Erik Fernholm
 Night of the Wolf por Nox Arcana
 Knockin' On Heaven's Door por Bob Dylan
 Fortunate Son por Creedence Clearwater Revival
@@ -1167,7 +1166,7 @@ Time por Hotel Pools
 Waterfall por Toby Fox
 Stairway to Heaven - Remaster por Led Zeppelin
 Good Times Bad Times - 1993 Remaster por Led Zeppelin
-Concerto Grosso in C Minor, Op. 6, No. 8, HWV 326: I. Allemande: Andante por George Frideric Handel
+Concerto grosso in C Minor, Op. 6 No. 8, HWV 326: I. Allemande. Andante por George Frideric Handel
 Diggin Deeper por Will Harrison
 Homage por Mild High Club
 SOS por ABBA
@@ -1194,7 +1193,7 @@ Smalltown Boy - 12" Version por Bronski Beat
 Bodies por Drowning Pool
 Albinoni's Adagio in G Minor por The Doors
 Dramatic Violins por Grooving Gecko
-Odeon por Ernesto Nazareth
+Odeón: Odeon por Ernesto Nazareth
 Cebola Cortada por MPB4
 Untitled #13 (Super Slowed) por glwzbll
 No Hands por Joy Crookes
@@ -1276,7 +1275,7 @@ The Perfect Girl Retrowave PBH (Slowed) por PBH
 I Am A Man Of Constant Sorrow - Radio Edit por The Soggy Bottom Boys
 Your Love por The Outfield
 Madame Lulu por Amedeo Tommasi
-Passacaglia and Fugue in C Minor, BWV 582: Passacaglia por Johann Sebastian Bach
+Passacaglia & Fugue in C Minor, BWV 582: Passacaglia and Fugue in C Minor, BWV 582: Passacaglia por Johann Sebastian Bach
 Space Oddity - 2015 Remaster por David Bowie
 Davy Jones's Theme (From ''Pirates of the Caribbean'') por Grissini Project
 Davy Jones's Theme (From ''Pirates of the Caribbean'') por Grissini Project
@@ -1314,3 +1313,46 @@ Afili Aşk (Ukulele Vers.) por Aslı Demirer
 Coffin Nails por MF DOOM
 Euthanasia por NXW TIME
 Heavy Metal: The Black and Silver por Blue Öyster Cult
+Veteran of the Psychic Wars - Live at Hollywood Sportatorium, Pembroke Pines, FL - October 1981 por Blue Öyster Cult
+(Don't Fear) The Reaper por Blue Öyster Cult
+(Don't Fear) The Reaper por Blue Öyster Cult
+Wolf por First Aid Kit
+Run por Lighthouse Family
+Six Blade Knife por Dire Straits
+Pslam 135 Orthodox Military por Byzantine Choir
+Riders In The Sky por Lawrence Welk and his Orchestra & Chorus
+Letters por Cowboy Crew
+Valse Davet por Emre Aracı
+No Decoder por Yogi Lang
+Amur Waves por Max Kyuss
+What Love Can Heartbreak Allow? por Ben Caplan
+Colors por Black Pumas
+Colors - Live In Studio por Black Pumas
+Feels Like Summer por Childish Gambino
+Music To Watch Boys To por Lana Del Rey
+Blinded by the Light por Manfred Mann's Earth Band
+The Shining - 2009 Remaster por Black Sabbath
+Stillborn por Black Label Society
+Walking South por The Tap Room
+Mr. Crowley por Ozzy Osbourne
+Hypothermic por Goodnight, Texas
+Legends Never Die por League of Legends
+Sin City por AC/DC
+Are You Ready por AC/DC
+Jailbreak por AC/DC
+Trampled Under Foot - Live from Earl's Court, 1975 por Led Zeppelin
+Like a Stone por Audioslave
+Bitter Sweet Symphony - Remastered 2016 por The Verve
+No Sugar Tonight / New Mother Nature - 2024 Remaster por The Guess Who
+Achilles Last Stand - Remaster por Led Zeppelin
+Manhattan por Eric Johnson
+Owner of a Lonely Heart por Yes
+Preacherman por Melody Gardot
+Rock or Bust por AC/DC
+War Machine por AC/DC
+Kick You When You're Down por AC/DC
+i'm on the case! por is it sunday?
+Swan Lake Suite, Op. 20: Dance of the Swans: Allegro moderato por Kosice Philharmonic Orchestra
+The Sky Is Crying por Elmore James
+It's A Man's, Man's, Man's World por James Brown & The Famous Flames
+MOTHER MARY por ANNABEL LEE

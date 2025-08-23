@@ -1,87 +1,340 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HR's Site</title>
-  <style>
-    /* Reset básico */
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
-      color: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome MR.HR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 50px;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1em;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            font-size: 22px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            line-height: 1.1em;
+            color: #777;
+        }
+        
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .input-container {
+            width: 100%;
+            position: relative;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(187, 187, 187, 0.15);
+            border: 1px solid rgba(136, 136, 136, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 400;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            border-color: rgba(136, 136, 136, 0.4);
+            background: rgba(187, 187, 187, 0.25);
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
+        }
+        
+        .input-field::placeholder {
+            color: #999;
+        }
+        
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 8px;
+            margin-top: 5px;
+            overflow: hidden;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        
+        .suggestion-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .suggestion-item:hover {
+            background: rgba(0, 122, 255, 0.2);
+        }
+        
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 8px;
+            min-height: 50px;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        .badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 10px 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-size: 12px;
+            color: black;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .badge:hover {
+            background: #fff;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+            
+            p {
+                font-size: 18px;
+            }
+            
+            .form-container {
+                max-width: 100%;
+            }
+        }
 
-    .container {
-      text-align: center;
-      max-width: 600px;
-      padding: 20px;
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
+        .command {
+            color: #0af;
+            font-weight: 500;
+        }
 
-    h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #fff;
-    }
-
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #d1d1d1;
-    }
-
-    .button-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .button {
-      padding: 15px 20px;
-      font-size: 1rem;
-      color: #fff;
-      background: rgba(0, 122, 255, 0.8);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0, 122, 255, 0.4);
-    }
-
-    .button:hover {
-      background: rgba(0, 122, 255, 1);
-      transform: scale(1.05);
-      box-shadow: 0 10px 25px rgba(0, 122, 255, 0.6);
-    }
-
-    .button:active {
-      transform: scale(0.98);
-    }
-  </style>
+        .description {
+            color: #ccc;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>HR's Site</h1>
-    <p>Escolha uma opção abaixo:</p>
-    <div class="button-container">
-      <a href="Biblioteca/index.html" class="button">Biblioteca</a>
-      <a href="Músicas/index.html" class="button">Backup de Músicas</a>
-      <a href="Database.kdbx" class="button" download>Backup de Senhas</a>
-      <a href="DecorarPassPhrase.py" class="button" download>Decorar Pass Phrase</a>
+    <div class="container">
+        <div class="hero">
+            <div class="text-container">
+                <h1>WELCOME MR.HR</h1>
+                <p>Access whatever you want just by typing :)</p>
+            </div>
+            <div class="form-container">
+                <div class="input-container">
+                    <input type="text" class="input-field" placeholder=">_" id="commandInput" autocomplete="off">
+                    <div class="suggestions" id="suggestions">
+                        <!-- As sugestões serão inseridas via JavaScript -->
+                    </div>
+                </div>
+                <div class="output" id="output">
+                    <!-- O output será inserido via JavaScript -->
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+    
+    <a href="https://framer.com/" class="badge" target="_blank">
+        Made with Framer
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputField = document.getElementById('commandInput');
+            const suggestions = document.getElementById('suggestions');
+            const output = document.getElementById('output');
+            
+            // Comandos disponíveis
+            const commands = {
+                'library': {
+                    description: 'Acessar a Biblioteca',
+                    action: () => window.location.href = 'Biblioteca/index.html'
+                },
+                'musics': {
+                    description: 'Acessar Backup de Músicas',
+                    action: () => window.location.href = 'Músicas/index.html'
+                },
+                'passwords': {
+                    description: 'Baixar Backup de Senhas',
+                    action: () => {
+                        const link = document.createElement('a');
+                        link.href = 'Database.kdbx';
+                        link.download = 'Database.kdbx';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                },
+                'passphrase': {
+                    description: 'Baixar Decorar Pass Phrase',
+                    action: () => {
+                        const link = document.createElement('a');
+                        link.href = 'DecorarPassPhrase.py';
+                        link.download = 'DecorarPassPhrase.py';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                },
+                'man': {
+                    description: 'Exibir lista de comandos',
+                    action: () => {
+                        showOutput();
+                        let html = '<div style="margin-bottom: 10px;">Comandos disponíveis:</div>';
+                        for (const [cmd, info] of Object.entries(commands)) {
+                            html += `<div><span class="command">${cmd}</span><span class="description">- ${info.description}</span></div>`;
+                        }
+                        output.innerHTML = html;
+                    }
+                }
+            };
+            
+            // Mostrar sugestões quando o input receber foco
+            inputField.addEventListener('focus', function() {
+                showSuggestions();
+            });
+            
+            // Esconder sugestões quando clicar fora
+            document.addEventListener('click', function(e) {
+                if (!inputField.contains(e.target) && !suggestions.contains(e.target)) {
+                    suggestions.style.display = 'none';
+                }
+            });
+            
+            // Processar comando quando pressionar Enter
+            inputField.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const command = this.value.trim().toLowerCase();
+                    
+                    if (command) {
+                        if (commands[command]) {
+                            // Executar comando específico
+                            commands[command].action();
+                        } else if (command.startsWith('http://') || command.startsWith('https://')) {
+                            // Se for uma URL completa
+                            window.location.href = command;
+                        } else if (command.includes('.') && !command.includes(' ')) {
+                            // Se for um domínio
+                            window.location.href = 'https://' + command;
+                        } else {
+                            // Pesquisar no Google
+                            window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(command);
+                        }
+                    }
+                }
+            });
+            
+            // Mostrar sugestões ao digitar
+            inputField.addEventListener('input', function() {
+                showSuggestions();
+            });
+            
+            // Função para mostrar sugestões
+            function showSuggestions() {
+                const value = inputField.value.toLowerCase();
+                let html = '';
+                
+                for (const [cmd, info] of Object.entries(commands)) {
+                    if (cmd.includes(value) || info.description.toLowerCase().includes(value)) {
+                        html += `<div class="suggestion-item" data-command="${cmd}">
+                            <span class="command">${cmd}</span>
+                            <span class="description">- ${info.description}</span>
+                        </div>`;
+                    }
+                }
+                
+                if (html) {
+                    suggestions.innerHTML = html;
+                    suggestions.style.display = 'block';
+                    
+                    // Adicionar evento de clique para as sugestões
+                    document.querySelectorAll('.suggestion-item').forEach(item => {
+                        item.addEventListener('click', function() {
+                            inputField.value = this.getAttribute('data-command');
+                            suggestions.style.display = 'none';
+                            inputField.focus();
+                        });
+                    });
+                } else {
+                    suggestions.style.display = 'none';
+                }
+            }
+            
+            // Função para mostrar output
+            function showOutput() {
+                output.style.display = 'block';
+            }
+            
+            // Focus no input quando a página carregar
+            inputField.focus();
+        });
+    </script>
 </body>
 </html>

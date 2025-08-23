@@ -100,42 +100,6 @@
             color: #999;
         }
         
-        .suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: rgba(30, 30, 30, 0.95);
-            border-radius: 8px;
-            margin-top: 5px;
-            overflow: hidden;
-            display: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
-        
-        .suggestion-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .suggestion-item:hover, .suggestion-item.highlighted {
-            background: rgba(0, 122, 255, 0.2);
-        }
-        
-        .command {
-            color: #0af;
-            font-weight: 500;
-        }
-        
-        .description {
-            color: #ccc;
-        }
-        
         .output {
             margin-top: 20px;
             padding: 15px;
@@ -195,7 +159,6 @@
             font-size: 12px;
             margin-top: 5px;
             text-align: right;
-            display: none;
         }
     </style>
 </head>
@@ -209,10 +172,6 @@
             <div class="form-container">
                 <div class="input-container">
                     <input type="text" class="input-field" placeholder=">_" id="commandInput" autocomplete="off">
-                    <div class="tab-hint" id="tabHint">Pressione TAB para autocompletar</div>
-                    <div class="suggestions" id="suggestions">
-                        <!-- As sugestões serão inseridas via JavaScript -->
-                    </div>
                 </div>
                 <div class="output" id="output">
                     <!-- O output será inserido via JavaScript -->
@@ -220,13 +179,15 @@
             </div>
         </div>
     </div>
+    
+    <a href="https://framer.com/" class="badge" target="_blank">
+        Made with Framer
+    </a>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const inputField = document.getElementById('commandInput');
-            const suggestions = document.getElementById('suggestions');
             const output = document.getElementById('output');
-            const tabHint = document.getElementById('tabHint');
             
             // Comandos disponíveis
             const commands = {
@@ -281,21 +242,7 @@
             };
             
             // Variáveis para controle do autocompletar
-            let currentSuggestions = [];
-            let selectedSuggestionIndex = -1;
-            
-            // Mostrar sugestões quando o input receber foco
-            inputField.addEventListener('focus', function() {
-                showSuggestions();
-            });
-            
-            // Esconder sugestões quando clicar fora
-            document.addEventListener('click', function(e) {
-                if (!inputField.contains(e.target) && !suggestions.contains(e.target)) {
-                    suggestions.style.display = 'none';
-                    tabHint.style.display = 'none';
-                }
-            });
+            let lastInputValue = '';
             
             // Processar comando quando pressionar Enter
             inputField.addEventListener('keypress', function(e) {
@@ -320,129 +267,53 @@
                 }
             });
             
-            // Mostrar sugestões ao digitar
-            inputField.addEventListener('input', function() {
-                showSuggestions();
-                selectedSuggestionIndex = -1;
-            });
-            
-            // Navegar pelas sugestões com as setas e autocompletar com TAB
+            // Auto-completar com TAB
             inputField.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowDown') {
+                if (e.key === 'Tab') {
                     e.preventDefault();
-                    navigateSuggestions(1);
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    navigateSuggestions(-1);
-                } else if (e.key === 'Tab' && currentSuggestions.length > 0) {
-                    e.preventDefault();
-                    autocomplete();
-                } else if (e.key === 'Escape') {
-                    suggestions.style.display = 'none';
-                    tabHint.style.display = 'none';
-                }
-            });
-            
-            // Função para navegar pelas sugestões
-            function navigateSuggestions(direction) {
-                if (currentSuggestions.length === 0) return;
-                
-                // Remover destaque atual
-                if (selectedSuggestionIndex >= 0) {
-                    const items = suggestions.querySelectorAll('.suggestion-item');
-                    items[selectedSuggestionIndex].classList.remove('highlighted');
-                }
-                
-                // Calcular novo índice
-                selectedSuggestionIndex += direction;
-                
-                // Garantir que o índice está dentro dos limites
-                if (selectedSuggestionIndex < 0) {
-                    selectedSuggestionIndex = currentSuggestions.length - 1;
-                } else if (selectedSuggestionIndex >= currentSuggestions.length) {
-                    selectedSuggestionIndex = 0;
-                }
-                
-                // Destacar nova sugestão
-                const items = suggestions.querySelectorAll('.suggestion-item');
-                items[selectedSuggestionIndex].classList.add('highlighted');
-                
-                // Atualizar o campo de input com a sugestão selecionada
-                inputField.value = currentSuggestions[selectedSuggestionIndex];
-            }
-            
-            // Função para autocompletar com TAB
-            function autocomplete() {
-                if (currentSuggestions.length === 0) return;
-                
-                // Se nenhuma sugestão está selecionada, use a primeira
-                if (selectedSuggestionIndex === -1) {
-                    selectedSuggestionIndex = 0;
-                }
-                
-                // Preencher o campo com a sugestão selecionada
-                inputField.value = currentSuggestions[selectedSuggestionIndex];
-                
-                // Esconder sugestões
-                suggestions.style.display = 'none';
-                tabHint.style.display = 'none';
-                
-                // Manter o foco no input
-                inputField.focus();
-            }
-            
-            // Função para mostrar sugestões
-            function showSuggestions() {
-                const value = inputField.value.toLowerCase();
-                currentSuggestions = [];
-                
-                // Se não há texto, não mostrar sugestões
-                if (value === '') {
-                    suggestions.style.display = 'none';
-                    tabHint.style.display = 'none';
-                    return;
-                }
-                
-                let html = '';
-                
-                for (const [cmd, info] of Object.entries(commands)) {
-                    if (cmd.includes(value) || info.description.toLowerCase().includes(value)) {
-                        html += `<div class="suggestion-item" data-command="${cmd}">
-                            <span class="command">${cmd}</span>
-                            <span class="description">${info.description}</span>
-                        </div>`;
-                        currentSuggestions.push(cmd);
+                    const text = this.value.toLowerCase();
+                    
+                    if (text) {
+                        // Encontrar comandos que começam com o texto digitado
+                        const matchingCommands = Object.keys(commands).filter(cmd => cmd.startsWith(text));
+                        
+                        if (matchingCommands.length > 0) {
+                            // Se há apenas um comando correspondente, complete-o
+                            if (matchingCommands.length === 1) {
+                                this.value = matchingCommands[0];
+                            } else {
+                                // Se há múltiplos comandos, ciclar entre eles
+                                if (lastInputValue !== text) {
+                                    // Novo texto, comece do primeiro comando
+                                    this.value = matchingCommands[0];
+                                    lastInputValue = text;
+                                } else {
+                                    // Mesmo texto, ciclar para o próximo comando
+                                    const currentIndex = matchingCommands.indexOf(this.value);
+                                    const nextIndex = (currentIndex + 1) % matchingCommands.length;
+                                    this.value = matchingCommands[nextIndex];
+                                }
+                                
+                                // Mostrar mensagem informativa
+                                showOutput();
+                                output.innerHTML = `<div>Comandos correspondentes: ${matchingCommands.join(', ')}</div>`;
+                                
+                                // Esconder a mensagem após 2 segundos
+                                setTimeout(() => {
+                                    output.style.display = 'none';
+                                }, 2000);
+                            }
+                        }
                     }
                 }
-                
-                if (html) {
-                    suggestions.innerHTML = html;
-                    suggestions.style.display = 'block';
-                    tabHint.style.display = 'block';
-                    
-                    // Adicionar evento de clique para as sugestões
-                    document.querySelectorAll('.suggestion-item').forEach((item, index) => {
-                        item.addEventListener('click', function() {
-                            inputField.value = this.getAttribute('data-command');
-                            suggestions.style.display = 'none';
-                            tabHint.style.display = 'none';
-                            inputField.focus();
-                            
-                            // Executar o comando automaticamente após seleção por clique
-                            setTimeout(() => {
-                                const event = new KeyboardEvent('keypress', { key: 'Enter' });
-                                inputField.dispatchEvent(event);
-                            }, 100);
-                        });
-                    });
-                } else {
-                    suggestions.style.display = 'none';
-                    tabHint.style.display = 'none';
+            });
+            
+            // Limpar o último valor quando o usuário começar a digitar
+            inputField.addEventListener('input', function() {
+                if (this.value.toLowerCase() !== lastInputValue) {
+                    lastInputValue = '';
                 }
-                
-                // Resetar a seleção de sugestões
-                selectedSuggestionIndex = -1;
-            }
+            });
             
             // Função para mostrar output
             function showOutput() {

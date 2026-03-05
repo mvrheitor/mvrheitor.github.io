@@ -13,6 +13,7 @@ const books = [
     { title: "Nada Pode Me Ferir", href: "Livros/nada-pode-me-ferir-9786555646146_compress.pdf" },
     { title: "A Divina Comédia", href: "Livros/Divina Comédia.pdf" },
     { title: "Meditações", href: "Livros/meditacoes marco aurelio.pdf" },
+    { title: "Mais Esperto que o Diabo", href: "Livros/Mais-Esperto-que-o-Diabo-Napoleon-Hill_251218_103311.pdf" },
 ];
 
 const normalize = (text) =>

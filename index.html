@@ -325,15 +325,10 @@
                         window.location.href = 'https://temp-mail.org/';
                     }
                 },
-                'filo': {
-                    description: 'Baixar o vídeo de Filosofia',
+                'g': {
+                    description: 'Abrir o Gemini',
                     action: () => {
-                        const link = document.createElement('a');
-                        link.href = 'Filosofia.mp4';
-                        link.download = 'Filosofia.mp4';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+                        window.location.href = 'https://gemini.google.com/';
                     }
                 }
             };

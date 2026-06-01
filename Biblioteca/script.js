@@ -17,6 +17,7 @@ const books = [
     { title: "Mais Esperto que o Diabo", href: "Livros/Mais-Esperto-que-o-Diabo-Napoleon-Hill_251218_103311.pdf" },
     { title: "O Que Todo Corpo Fala", href: "Livros/O_que_todo_corpo_fala_Joe_Navarro.pdf" },
     { title: "O Corpo Fala", href: "Livros/O_Corpo_Fala_Pierre_Weil.pdf" },
+    { title: "A Arte e a Ciência de Memorizar Tudo (Moonwalking with Einstein)", href: "Livros/A Arte e a Ciência de Memorizar Tudo (Moonwalking with Einstein).pdf" },
 ];
 
 const normalize = (text) =>

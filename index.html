@@ -1,426 +1,511 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome MR.HR</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        
-        body {
-            background-color: #000;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 600px;
-        }
-        
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 20px;
-        }
-        
-        .text-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-        
-        h1 {
-            font-size: 50px;
-            font-weight: 700;
-            letter-spacing: -0.04em;
-            line-height: 1em;
-            margin-bottom: 10px;
-        }
-        
-        p {
-            font-size: 22px;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            line-height: 1.1em;
-            color: #777;
-        }
-        
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-            padding: 20px;
-        }
-        
-        .input-container {
-            width: 100%;
-            position: relative;
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 15px 20px;
-            background: rgba(187, 187, 187, 0.15);
-            border: 1px solid rgba(136, 136, 136, 0.2);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 400;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        
-        .input-field:focus {
-            border-color: rgba(136, 136, 136, 0.4);
-            background: rgba(187, 187, 187, 0.25);
-            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
-        }
-        
-        .input-field::placeholder {
-            color: #999;
-        }
-        
-        .output {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(30, 30, 30, 0.7);
-            border-radius: 8px;
-            min-height: 50px;
-            display: none;
-            backdrop-filter: blur(5px);
-        }
-        
-        .badge {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 10px 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            font-size: 12px;
-            color: black;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .badge:hover {
-            background: #fff;
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 36px;
-            }
-            
-            p {
-                font-size: 18px;
-            }
-            
-            .form-container {
-                max-width: 100%;
-            }
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MR.HR // terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000;
+    --fg:#e9e9e9;
+    --dim:#7a7a7a;
+    --muted:#3a3a3a;
+    --hot:#ffffff;
+    --accent:#ffffff;
+    --glow: 0 0 2px rgba(255,255,255,.55), 0 0 10px rgba(255,255,255,.18), 0 0 22px rgba(255,255,255,.08);
+    --mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --crt:'VT323', var(--mono);
+  }
 
-        .output-command {
-            color: #0af;
-            font-weight: 500;
-        }
+  *{margin:0;padding:0;box-sizing:border-box}
 
-        .output-description {
-            color: #ccc;
-            margin-left: 10px;
-        }
-        
-        .tab-hint {
-            color: #666;
-            font-size: 12px;
-            margin-top: 5px;
-            text-align: right;
-        }
-    </style>
+  html,body{
+    background:#000;
+    color:var(--fg);
+    height:100%;
+    font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* CRT scanlines + vignette + flicker layers */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.045) 0px,
+        rgba(255,255,255,0.045) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    pointer-events:none;
+    z-index:5;
+    mix-blend-mode:overlay;
+  }
+  body::after{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.85) 100%),
+      radial-gradient(ellipse at center, rgba(255,255,255,.04) 0%, rgba(0,0,0,0) 60%);
+    pointer-events:none;
+    z-index:6;
+    animation: flicker 5.5s infinite steps(2,end);
+  }
+
+  @keyframes flicker{
+    0%   { opacity:1 }
+    3%   { opacity:.85 }
+    6%   { opacity:1 }
+    7%   { opacity:.92 }
+    9%   { opacity:1 }
+    50%  { opacity:.98 }
+    51%  { opacity:.86 }
+    52%  { opacity:1 }
+    100% { opacity:1 }
+  }
+
+  /* very faint horizontal scan beam */
+  .scanbeam{
+    position:fixed;left:0;right:0;height:120px;top:-120px;
+    background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,.05) 50%, rgba(255,255,255,0) 100%);
+    pointer-events:none;z-index:4;
+    animation: beam 7s linear infinite;
+  }
+  @keyframes beam{
+    0%   { transform: translateY(-10vh) }
+    100% { transform: translateY(120vh) }
+  }
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    min-height:100vh;
+    padding: 28px clamp(16px, 4vw, 56px) 80px;
+    display:flex;flex-direction:column;
+    max-width:1100px;margin:0 auto;
+  }
+
+  /* top status bar */
+  .statusbar{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--dim);
+    border-bottom:1px dashed rgba(255,255,255,.12);
+    padding-bottom:8px;margin-bottom:18px;
+  }
+  .statusbar .left,.statusbar .right{display:flex;gap:18px;align-items:center}
+  .dot{width:7px;height:7px;border-radius:50%;background:#fff;display:inline-block;box-shadow:var(--glow);animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+  /* ASCII banner */
+  .banner-wrap{
+    margin: clamp(10px, 4vh, 40px) 0 clamp(10px, 3vh, 28px);
+    display:flex;flex-direction:column;align-items:flex-start;
+  }
+  pre.banner{
+    font-family:var(--mono);
+    color:var(--hot);
+    font-size: clamp(6px, 1.1vw, 13px);
+    line-height:1.05;
+    letter-spacing:0;
+    text-shadow:var(--glow);
+    white-space:pre;
+    margin:0;
+    font-weight:700;
+    min-height: 6.3em; /* reserve space to avoid layout shift while typing */
+  }
+  pre.banner.typing::after{
+    content:"▉";
+    display:inline-block;
+    animation:blink 1s steps(2,end) infinite;
+    margin-left:2px;
+  }
+  .banner-sub{
+    color:var(--dim);
+    font-size:12px;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    margin-top:14px;
+    border-left:2px solid #fff;
+    padding-left:10px;
+    text-shadow:var(--glow);
+  }
+  .banner-sub b{color:#fff;font-weight:500}
+  .cursor-block{
+    display:inline-block;width:.55em;height:1em;background:#fff;
+    transform:translateY(2px);
+    box-shadow:var(--glow);
+    animation:blink 1s steps(2,end) infinite;
+    margin-left:2px;
+  }
+  @keyframes blink{50%{opacity:0}}
+
+  /* prompt input */
+  .prompt{
+    margin-top: clamp(14px, 4vh, 36px);
+    display:flex;align-items:center;gap:10px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.025);
+    padding:14px 16px;
+    border-radius:2px;
+    position:relative;
+    transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+  }
+  .prompt:focus-within{
+    border-color:rgba(255,255,255,.65);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 0 30px rgba(255,255,255,.08) inset;
+  }
+  .prompt .sigil{
+    color:#fff;font-weight:700;text-shadow:var(--glow);
+    white-space:nowrap;user-select:none;
+    font-size:14px;letter-spacing:.06em;
+  }
+  .prompt input{
+    flex:1;background:transparent;border:0;outline:0;
+    color:#fff;font-family:var(--mono);font-size:15px;letter-spacing:.02em;
+    caret-color: #fff;
+    text-shadow: 0 0 1px rgba(255,255,255,.4);
+  }
+  .prompt input::placeholder{
+    color: #6a6a6a;
+    text-shadow:none;
+    font-style: normal;
+  }
+  .prompt .hint{
+    position:absolute;right:14px;bottom:-22px;
+    font-size:10px;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;
+  }
+
+  /* YouTube mode skin */
+  body.mode-youtube .prompt{
+    border-color:rgba(255,255,255,.9);
+    background: rgba(255,255,255,.06);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.35),
+      0 0 22px rgba(255,255,255,.18),
+      inset 0 0 30px rgba(255,255,255,.06);
+  }
+  body.mode-youtube .prompt .sigil{
+    color:#000;background:#fff;padding:2px 8px;border-radius:1px;
+    text-shadow:none;letter-spacing:.18em;
+  }
+  body.mode-youtube .statusbar .mode-tag{
+    color:#000;background:#fff;padding:2px 8px;letter-spacing:.18em;
+  }
+  body.mode-youtube pre.banner{ opacity:.35; filter:blur(.4px) }
+  body.mode-youtube .banner-sub{ opacity:.4 }
+
+  /* output */
+  .output{
+    margin-top: 36px;
+    font-size:13px;line-height:1.65;
+    color:var(--fg);
+    display:none;
+    border-left:1px solid rgba(255,255,255,.14);
+    padding:6px 0 6px 14px;
+    animation: fadein .12s ease-out;
+  }
+  .output.show{display:block}
+  .output .cmd{color:#fff;font-weight:700;text-shadow:var(--glow)}
+  .output .desc{color:#9a9a9a}
+  .output .grid{
+    display:grid;grid-template-columns: 110px 1fr;
+    gap:4px 16px;margin-top:8px;
+  }
+  .output .header{
+    color:var(--dim);text-transform:uppercase;letter-spacing:.22em;font-size:10px;
+    margin-bottom:6px;
+  }
+  @keyframes fadein{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:none}}
+
+  /* boot lines */
+  .bootlog{
+    color:var(--dim);font-size:11px;line-height:1.55;
+    margin-top:18px;letter-spacing:.02em;
+    min-height: 0;
+  }
+  .bootlog div{opacity:0;animation: bootline .25s ease-out forwards}
+  .bootlog div b{color:#fff;font-weight:500}
+  .bootlog div span.ok{color:#fff}
+
+  @keyframes bootline{to{opacity:1}}
+
+  /* responsive */
+  @media (max-width: 720px){
+    pre.banner{ font-size: 7px }
+    .statusbar{font-size:9px;gap:6px;flex-wrap:wrap}
+    .banner-sub{font-size:10px;letter-spacing:.22em}
+  }
+  @media (max-width: 420px){
+    pre.banner{ font-size: 5.5px }
+    .wrap{padding:18px 14px 60px}
+  }
+
+  /* selection */
+  ::selection{ background:#fff; color:#000 }
+
+  /* anti-AI-slop: subtle grain */
+  .grain{
+    position:fixed;inset:0;pointer-events:none;z-index:3;opacity:.06;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+  }
+</style>
 </head>
-<body>
-    <div class="container">
-        <div class="hero">
-            <div class="text-container">
-                <h1>WELCOME MR.HR</h1>
-                <p>Access whatever you want just by typing :)</p>
-            </div>
-            <div class="form-container">
-                <div class="input-container">
-                    <input type="text" class="input-field" placeholder=">_" id="commandInput" autocomplete="off">
-                </div>
-                <div class="output" id="output">
-                    <!-- O output será inserido via JavaScript -->
-                </div>
-            </div>
-        </div>
+<body data-testid="terminal-body">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scanbeam" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <div class="statusbar" data-testid="statusbar">
+      <div class="left">
+        <span class="dot"></span>
+        <span>mr.hr // terminal</span>
+        <span id="modeTag" class="mode-tag" data-testid="mode-tag">cmd</span>
+      </div>
+      <div class="right">
+        <span id="clock" data-testid="clock">--:--:--</span>
+        <span>v2.0</span>
+      </div>
     </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputField = document.getElementById('commandInput');
-            const output = document.getElementById('output');
-            
-            // Comandos disponíveis
-            const commands = {
-                'library': {
-                    description: 'Acessar a Biblioteca',
-                    action: () => window.location.href = 'Biblioteca/index.html'
-                },
-                'musics': {
-                    description: 'Acessar Backup de Músicas',
-                    action: () => window.location.href = 'Músicas/index.html'
-                },
-                'passwords': {
-                    description: 'Baixar Backup de Senhas',
-                    action: () => {
-                        const link = document.createElement('a');
-                        link.href = 'Database.kdbx';
-                        link.download = 'Database.kdbx';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-                },
-                'passphrase': {
-                    description: 'Baixar Decorar Pass Phrase',
-                    action: () => {
-                        const link = document.createElement('a');
-                        link.href = 'DecorarPassPhrase.py';
-                        link.download = 'DecorarPassPhrase.py';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-                },
-                'man': {
-                    description: 'Exibir lista de comandos',
-                    action: () => {
-                        showOutput();
-                        let html = '<div style="margin-bottom: 10px;">Comandos disponíveis:</div>';
-                        for (const [cmd, info] of Object.entries(commands)) {
-                            html += `<div><span class="output-command">${cmd}</span><span class="output-description">- ${info.description}</span></div>`;
-                        }
-                        output.innerHTML = html;
-                    }
-                },
-                'clear': {
-                    description: 'Limpar a tela',
-                    action: () => {
-                        output.style.display = 'none';
-                        output.innerHTML = '';
-                    }
-                },
-                'y': {
-                    description: 'Abrir YouTube',
-                    action: () => {
-                        window.location.href = 'https://www.youtube.com';
-                    }
-                },
-                'coin': {
-                    description: 'Abrir cotação do Bitcoin',
-                    action: () => {
-                        window.location.href = 'https://coinmarketcap.com/currencies/bitcoin/';
-                    }
-                },
-                'chat': {
-                    description: 'Abrir ChatGPT',
-                    action: () => {
-                        window.location.href = 'https://chatgpt.com/';
-                    }
-                },
-                'sig': {
-                    description: 'Abrir SIGAA',
-                    action: () => {
-                        window.location.href = 'https://sig.ifc.edu.br/sigaa/verTelaLogin.do';
-                    }
-                },
-                'gdb': {
-                    description: 'Abrir GDB Online',
-                    action: () => {
-                        window.location.href = 'https://www.onlinegdb.com/online_c_compiler';
-                    }
-                },
-                'one': {
-                    description: 'Abrir OneDrive',
-                    action: () => {
-                        window.location.href = 'https://saofrancisco-my.sharepoint.com/my';
-                    }
-                },
-                'git': {
-                    description: 'Abrir GitHub',
-                    action: () => {
-                        window.location.href = 'https://github.com/';
-                    }
-                },
-                'w': {
-                    description: 'Abrir WhatsApp Web',
-                    action: () => {
-                        window.location.href = 'https://web.whatsapp.com/';
-                    }
-                },
-                'convert': {
-                    description: 'Abrir conversor de arquivos',
-                    action: () => {
-                        window.location.href = 'https://convertio.co/';
-                    }
-                },
-                'gmail': {
-                    description: 'Abrir Gmail',
-                    action: () => {
-                        window.location.href = 'https://mail.google.com/mail/u/0/#inbox';
-                    }
-                },
-                'telegram': {
-                    description: 'Abrir o Friv Jogos (claro que é o Telegram né)',
-                    action: () => {
-                        window.location.href = 'https://web.telegram.org/';
-                    }
-                },
-                't': {
-                    description: 'Abrir Google Tradutor',
-                    action: () => {
-                        window.location.href = 'https://translate.google.com.br/';
-                    }
-                },
-                'per': {
-                    description: 'Abrir o Perplexity AI',
-                    action: () => {
-                        window.location.href = 'https://perplexity.ai/';
-                    }
-                },
-                'i': {
-                    description: 'Abrir o Instagram',
-                    action: () => {
-                        window.location.href = 'https://instagram.com/';
-                    }
-                },
-                'tpm': {
-                    description: 'Abrir o temp mail (óbvio)',
-                    action: () => {
-                        window.location.href = 'https://temp-mail.org/';
-                    }
-                },
-                'g': {
-                    description: 'Abrir o Gemini',
-                    action: () => {
-                        window.location.href = 'https://gemini.google.com/';
-                    }
-                },
-                'olim': {
-                    description: 'Abrir site do calendário olímpico',
-                    action: () => {
-                        window.location.href = 'https://calendarioolimpicoifcsfs.framer.website/';
-                    }
-                }
-            };
-            
-            // Variáveis para controle do autocompletar
-            let lastInputValue = '';
-            
-            // Processar comando quando pressionar Enter
-            inputField.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    const command = this.value.trim().toLowerCase();
-                    
-                    if (command) {
-                        if (commands[command]) {
-                            // Executar comando específico
-                            commands[command].action();
-                        } else if (command.startsWith('http://') || command.startsWith('https://')) {
-                            // Se for uma URL completa
-                            window.location.href = command;
-                        } else if (command.includes('.') && !command.includes(' ')) {
-                            // Se for um domínio
-                            window.location.href = 'https://' + command;
-                        } else {
-                            // Pesquisar no Google
-                            window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(command);
-                        }
-                    }
-                }
-            });
-            
-            // Auto-completar com TAB
-            inputField.addEventListener('keydown', function(e) {
-                if (e.key === 'Tab') {
-                    e.preventDefault();
-                    const text = this.value.toLowerCase();
-                    
-                    if (text) {
-                        // Encontrar comandos que começam com o texto digitado
-                        const matchingCommands = Object.keys(commands).filter(cmd => cmd.startsWith(text));
-                        
-                        if (matchingCommands.length > 0) {
-                            // Se há apenas um comando correspondente, complete-o
-                            if (matchingCommands.length === 1) {
-                                this.value = matchingCommands[0];
-                            } else {
-                                // Se há múltiplos comandos, ciclar entre eles
-                                if (lastInputValue !== text) {
-                                    // Novo texto, comece do primeiro comando
-                                    this.value = matchingCommands[0];
-                                    lastInputValue = text;
-                                } else {
-                                    // Mesmo texto, ciclar para o próximo comando
-                                    const currentIndex = matchingCommands.indexOf(this.value);
-                                    const nextIndex = (currentIndex + 1) % matchingCommands.length;
-                                    this.value = matchingCommands[nextIndex];
-                                }
-                                
-                                // Mostrar mensagem informativa
-                                showOutput();
-                                output.innerHTML = `<div>Comandos correspondentes: ${matchingCommands.join(', ')}</div>`;
-                                
-                                // Esconder a mensagem após 2 segundos
-                                setTimeout(() => {
-                                    output.style.display = 'none';
-                                }, 2000);
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Limpar o último valor quando o usuário começar a digitar
-            inputField.addEventListener('input', function() {
-                if (this.value.toLowerCase() !== lastInputValue) {
-                    lastInputValue = '';
-                }
-            });
-            
-            // Função para mostrar output
-            function showOutput() {
-                output.style.display = 'block';
-            }
-            
-            // Focus no input quando a página carregar
-            inputField.focus();
-        });
-    </script>
+
+    <section class="banner-wrap" aria-label="banner">
+<pre class="banner" id="banner" data-testid="banner"></pre>
+      <pre id="bannerSource" style="display:none" aria-hidden="true"> _       __________    __________  __  _________     __  ______ 
+| |     / / ____/ /   / ____/ __ \/  |/  / ____/    / / / / __ \
+| | /| / / __/ / /   / /   / / / / /|_/ / __/      / /_/ / /_/ /
+| |/ |/ / /___/ /___/ /___/ /_/ / /  / / /____    / __  / _, _/ 
+|__/|__/_____/_____/\____/\____/_/  /_/_____( )  /_/ /_/_/ |_|  
+                                            |/                  </pre>
+      <div class="banner-sub">
+        <b>access whatever you want</b> &nbsp;·&nbsp; just type &nbsp;·&nbsp; <span style="color:#fff">man</span> for help<span class="cursor-block"></span>
+      </div>
+    </section>
+
+    <div class="prompt" data-testid="prompt">
+      <span class="sigil" id="sigil" data-testid="sigil">mr.hr:~$</span>
+      <input
+        id="commandInput"
+        data-testid="command-input"
+        type="text"
+        placeholder=">_ type a command  ·  TAB to autocomplete  ·  MAN for help"
+        autocomplete="off"
+        autocapitalize="off"
+        autocorrect="off"
+        spellcheck="false"
+        aria-label="terminal command"
+      >
+      <div class="hint">[ tab ]&nbsp;autocomplete &nbsp; [ esc ]&nbsp;exit mode</div>
+    </div>
+
+    <div class="output" id="output" data-testid="output"></div>
+
+    <div class="bootlog" id="bootlog" data-testid="bootlog"></div>
+  </main>
+
+<script>
+(function(){
+  const $ = (s)=>document.querySelector(s);
+  const input   = $('#commandInput');
+  const output  = $('#output');
+  const sigil   = $('#sigil');
+  const modeTag = $('#modeTag');
+  const clock   = $('#clock');
+  const bootlog = $('#bootlog');
+  const body    = document.body;
+
+  const commands = {
+    library:    { desc:'Acessar a Biblioteca',            run:()=> location.href='Biblioteca/index.html' },
+    musics:     { desc:'Acessar Backup de Músicas',       run:()=> location.href='Músicas/index.html' },
+    passwords:  { desc:'Baixar Backup de Senhas',         run:()=> download('Database.kdbx') },
+    passphrase: { desc:'Baixar Decorar Pass Phrase',      run:()=> download('DecorarPassPhrase.py') },
+    man:        { desc:'Exibir lista de comandos',        run:()=> showMan() },
+    clear:      { desc:'Limpar a tela',                   run:()=> { output.classList.remove('show'); output.innerHTML=''; } },
+    y:          { desc:'Modo de busca no YouTube',        run:()=> location.href='https://www.youtube.com' },
+    coin:       { desc:'Abrir cotação do Bitcoin',        run:()=> location.href='https://coinmarketcap.com/currencies/bitcoin/' },
+    chat:       { desc:'Abrir ChatGPT',                   run:()=> location.href='https://chatgpt.com/' },
+    sig:        { desc:'Abrir SIGAA',                     run:()=> location.href='https://sig.ifc.edu.br/sigaa/verTelaLogin.do' },
+    gdb:        { desc:'Abrir GDB Online',                run:()=> location.href='https://www.onlinegdb.com/online_c_compiler' },
+    one:        { desc:'Abrir OneDrive',                  run:()=> location.href='https://saofrancisco-my.sharepoint.com/my' },
+    git:        { desc:'Abrir GitHub',                    run:()=> location.href='https://github.com/' },
+    w:          { desc:'Abrir WhatsApp Web',              run:()=> location.href='https://web.whatsapp.com/' },
+    convert:    { desc:'Abrir conversor de arquivos',     run:()=> location.href='https://convertio.co/' },
+    gmail:      { desc:'Abrir Gmail',                     run:()=> location.href='https://mail.google.com/mail/u/0/#inbox' },
+    telegram:   { desc:'Abrir o Friv Jogos (claro que é o Telegram né)', run:()=> location.href='https://web.telegram.org/' },
+    t:          { desc:'Abrir Google Tradutor',           run:()=> location.href='https://translate.google.com.br/' },
+    per:        { desc:'Abrir o Perplexity AI',           run:()=> location.href='https://perplexity.ai/' },
+    i:          { desc:'Abrir o Instagram',               run:()=> location.href='https://instagram.com/' },
+    tpm:        { desc:'Abrir o temp mail (óbvio)',       run:()=> location.href='https://temp-mail.org/' },
+    g:          { desc:'Abrir o Gemini',                  run:()=> location.href='https://gemini.google.com/' },
+    olim:       { desc:'Abrir site do calendário olímpico', run:()=> location.href='https://calendarioolimpicoifcsfs.framer.website/' }
+  };
+
+  function download(file){
+    const a=document.createElement('a');
+    a.href=file; a.download=file;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  function showOutput(){ output.classList.add('show'); }
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  function showMan(){
+    showOutput();
+    let html = `<div class="header">// available commands</div><div class="grid">`;
+    for (const [cmd, info] of Object.entries(commands)){
+      html += `<div class="cmd">${cmd}</div><div class="desc">${info.desc}</div>`;
+    }
+    html += `</div>`;
+    output.innerHTML = html;
+  }
+
+  // ----- mode handling -----
+  let mode = 'cmd'; // 'cmd' | 'youtube'
+  let lastTabPrefix = '';
+
+  function setMode(next){
+    mode = next;
+    if (next === 'youtube'){
+      body.classList.add('mode-youtube');
+      sigil.textContent = 'youtube:search$';
+      modeTag.textContent = 'youtube';
+      input.value = '';
+      input.placeholder = 'Search on YouTube...  ·  ENTER to search  ·  ESC to exit';
+    } else {
+      body.classList.remove('mode-youtube');
+      sigil.textContent = 'mr.hr:~$';
+      modeTag.textContent = 'cmd';
+      input.placeholder = '>_ type a command  ·  TAB to autocomplete  ·  MAN for help';
+    }
+    input.focus();
+  }
+
+  // ----- key handlers -----
+  input.addEventListener('keydown', (e)=>{
+    // ESC always exits youtube mode
+    if (e.key === 'Escape'){
+      if (mode === 'youtube'){ e.preventDefault(); setMode('cmd'); input.value=''; }
+      return;
+    }
+
+    if (e.key === 'Enter'){
+      const value = input.value.trim();
+      if (!value && mode !== 'youtube') return;
+
+      if (mode === 'youtube'){
+        const q = encodeURIComponent(value);
+        location.href = 'https://www.youtube.com/results?search_query=' + q;
+        return;
+      }
+
+      const cmd = value.toLowerCase();
+      if (commands[cmd]){
+        commands[cmd].run();
+      } else if (/^https?:\/\//i.test(cmd)){
+        location.href = cmd;
+      } else if (cmd.includes('.') && !cmd.includes(' ')){
+        location.href = 'https://' + cmd;
+      } else {
+        location.href = 'https://www.google.com/search?q=' + encodeURIComponent(cmd);
+      }
+      return;
+    }
+
+    if (e.key === 'Tab'){
+      e.preventDefault();
+      const raw = input.value.trim().toLowerCase();
+
+      // SPECIAL: y + tab -> enter youtube mode
+      if (mode !== 'youtube' && raw === 'y'){
+        setMode('youtube');
+        return;
+      }
+
+      if (!raw) return;
+      const matches = Object.keys(commands).filter(c => c.startsWith(raw));
+      if (!matches.length) return;
+
+      if (matches.length === 1){
+        input.value = matches[0];
+        lastTabPrefix = '';
+        return;
+      }
+      // cycle
+      if (lastTabPrefix !== raw){
+        input.value = matches[0];
+        lastTabPrefix = raw;
+      } else {
+        const idx = matches.indexOf(input.value);
+        input.value = matches[(idx+1) % matches.length];
+      }
+      showOutput();
+      output.innerHTML = `<div class="header">// matches</div><div>${matches.map(m=>`<span class="cmd">${m}</span>`).join('&nbsp;&nbsp;')}</div>`;
+      clearTimeout(showMan._t);
+      showMan._t = setTimeout(()=>{ output.classList.remove('show'); }, 1600);
+    }
+  });
+
+  input.addEventListener('input', ()=>{
+    if (input.value.toLowerCase() !== lastTabPrefix) lastTabPrefix = '';
+  });
+
+  // refocus on click anywhere
+  document.addEventListener('click', (e)=>{
+    if (e.target.tagName === 'A') return;
+    input.focus();
+  });
+
+  // ----- clock -----
+  function tickClock(){
+    const d = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    clock.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  tickClock(); setInterval(tickClock, 1000);
+
+  // ----- boot lines (cheap, fast, non-blocking) -----
+  const lines = [
+    `<b>booting</b> mr.hr/terminal <span class="ok">[ok]</span>`,
+    `loaded <b>${Object.keys(commands).length}</b> commands <span class="ok">[ready]</span>`,
+    `hint: type <b>man</b> for the full command map`
+  ];
+  lines.forEach((html, i)=>{
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    div.style.animationDelay = (80 + i*120) + 'ms';
+    bootlog.appendChild(div);
+  });
+
+  // ----- banner typing animation (~500ms total) -----
+  (function typeBanner(){
+    const target = document.getElementById('banner');
+    const src = document.getElementById('bannerSource').textContent;
+    target.classList.add('typing');
+    const lines = src.split('\n');
+    const totalMs = 500;
+    const stepMs = Math.max(8, Math.floor(totalMs / lines.length));
+    let i = 0;
+    function step(){
+      if (i >= lines.length){
+        target.classList.remove('typing');
+        return;
+      }
+      target.textContent += (i === 0 ? '' : '\n') + lines[i];
+      i++;
+      setTimeout(step, stepMs);
+    }
+    step();
+  })();
+
+  // ----- focus input -----
+  input.focus();
+})();
+</script>
 </body>
 </html>

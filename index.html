@@ -201,6 +201,92 @@
   body.mode-youtube pre.banner{ opacity:.35; filter:blur(.4px) }
   body.mode-youtube .banner-sub{ opacity:.4 }
 
+  /* Library mode skin (mirrors youtube but with its own accents) */
+  body.mode-library .prompt{
+    border-color:rgba(255,255,255,.9);
+    background: rgba(255,255,255,.04);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.3),
+      0 0 22px rgba(255,255,255,.14),
+      inset 0 0 30px rgba(255,255,255,.05);
+  }
+  body.mode-library .prompt .sigil{
+    color:#000;background:#fff;padding:2px 8px;border-radius:1px;
+    text-shadow:none;letter-spacing:.18em;
+  }
+  body.mode-library .statusbar .mode-tag{
+    color:#000;background:#fff;padding:2px 8px;letter-spacing:.18em;
+  }
+  body.mode-library pre.banner{ opacity:.25; filter:blur(.4px) }
+  body.mode-library .banner-sub{ opacity:.35 }
+  body.mode-library .bootlog{ display:none }
+
+  /* Library results list */
+  .lib-results{
+    margin-top: 22px;
+    display:none;
+    font-size:13px;
+    border-left:1px solid rgba(255,255,255,.14);
+    padding:6px 0 6px 14px;
+    animation: fadein .12s ease-out;
+  }
+  body.mode-library .lib-results{ display:block }
+  .lib-results .lib-header{
+    color:var(--dim);text-transform:uppercase;letter-spacing:.22em;font-size:10px;
+    margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .lib-results .lib-count{ color:#fff }
+  .lib-results ul{ list-style:none;padding:0;margin:0 }
+  .lib-results li{
+    display:grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items:center;
+    gap:10px;
+    padding:6px 10px;
+    border:1px solid transparent;
+    color:#cfcfcf;
+    cursor:pointer;
+    transition: background .12s ease, border-color .12s ease, color .12s ease;
+    user-select:none;
+  }
+  .lib-results li:hover{
+    background:rgba(255,255,255,.06);
+    border-color:rgba(255,255,255,.18);
+    color:#fff;
+  }
+  .lib-results li.active{
+    background:#fff;
+    color:#000;
+    border-color:#fff;
+    text-shadow:none;
+  }
+  .lib-results li.active .lib-idx{ color:#000 }
+  .lib-results li.active .lib-ext{ color:#000;opacity:.7 }
+  .lib-results .lib-idx{
+    color:var(--dim);font-family:var(--mono);font-size:11px;
+    text-align:right;letter-spacing:.05em;
+  }
+  .lib-results .lib-title{
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-family:var(--mono);
+  }
+  .lib-results .lib-title mark{
+    background:transparent;color:#fff;font-weight:700;text-shadow:var(--glow);
+  }
+  .lib-results li.active .lib-title mark{
+    color:#000;text-shadow:none;background:rgba(0,0,0,.15);
+  }
+  .lib-results .lib-ext{
+    color:var(--dim);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  }
+  .lib-results .lib-empty{
+    color:var(--dim);padding:8px 4px;font-style:italic;
+  }
+  .lib-results .lib-footer{
+    margin-top:12px;color:var(--dim);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  }
+  .lib-results .lib-footer b{ color:#fff;font-weight:500 }
+
   /* output */
   .output{
     margin-top: 36px;
@@ -306,22 +392,54 @@
 
     <div class="output" id="output" data-testid="output"></div>
 
+    <section class="lib-results" id="libResults" data-testid="lib-results" aria-live="polite"></section>
+
     <div class="bootlog" id="bootlog" data-testid="bootlog"></div>
   </main>
 
 <script>
 (function(){
   const $ = (s)=>document.querySelector(s);
-  const input   = $('#commandInput');
-  const output  = $('#output');
-  const sigil   = $('#sigil');
-  const modeTag = $('#modeTag');
-  const clock   = $('#clock');
-  const bootlog = $('#bootlog');
-  const body    = document.body;
+  const input    = $('#commandInput');
+  const output   = $('#output');
+  const sigil    = $('#sigil');
+  const modeTag  = $('#modeTag');
+  const clock    = $('#clock');
+  const bootlog  = $('#bootlog');
+  const libBox   = $('#libResults');
+  const body     = document.body;
+
+  // ----- Library data -----
+  // Base path where the "Livros/" folder lives, relative to this index.html.
+  // If your Livros/ folder is at the same level as index.html, change to "".
+  const LIBRARY_BASE = 'Biblioteca/';
+  const books = [
+    { title: "2001: Uma odisséia no espaço", href: "Livros/2001 Odisséia No Espaço.pdf" },
+    { title: "Hábitos Atômicos", href: "Livros/habitos-atomicos-by-james-clear-z-liborg_251218_125140.pdf" },
+    { title: "O Homem Mais Rico da Babilônia", href: "Livros/O-Homem-Mais-Rico-da-Babilonia-George-S.-Clason.pdf" },
+    { title: "O Profeta", href: "Livros/O Profeta.pdf" },
+    { title: "O Problema dos Três Corpos", href: "Livros/o-problema-dos-tres-corpos-cixin-liu_compress.pdf" },
+    { title: "Ponte para Terabitia", href: "Livros/katherine_paterson_-_ponte_para_terabitia.pdf" },
+    { title: "Sapiens: Uma Breve História da Humanidade", href: "Livros/Sapiens Uma Breve História da Humanidade.pdf" },
+    { title: "Eterna vigilância: Como montei e desvendei o maior sistema de espionagem do mundo", href: "Livros/Edward Snowden - Eterna vigilância Como montei e desvendei o maior sistema de espionagem do mundo.pdf" },
+    { title: "Como fazer amigos e influenciar pessoas", href: "Livros/Como-Fazer-Amigos-e-Influenciar-Pessoas-Dale-Carnegie.pdf" },
+    { title: "As 48 Leis do Poder", href: "Livros/As_48_Leis_do_Poder_completo.pdf" },
+    { title: "O Método Bullet Journal", href: "Livros/Ryder Carroll - O Método Bullet Journal_250725_103015.pdf" },
+    { title: "Disciplina é Libertade", href: "Livros/disciplina-igual-a-libertad-jocko-willink.pdf" },
+    { title: "Nada Pode Me Ferir", href: "Livros/nada-pode-me-ferir-9786555646146_compress.pdf" },
+    { title: "A Divina Comédia", href: "Livros/Divina Comédia.pdf" },
+    { title: "Meditações", href: "Livros/meditacoes marco aurelio.pdf" },
+    { title: "Mais Esperto que o Diabo", href: "Livros/Mais-Esperto-que-o-Diabo-Napoleon-Hill_251218_103311.pdf" },
+    { title: "O Que Todo Corpo Fala", href: "Livros/O_que_todo_corpo_fala_Joe_Navarro.pdf" },
+    { title: "O Corpo Fala", href: "Livros/O_Corpo_Fala_Pierre_Weil.pdf" },
+    { title: "A Arte e a Ciência de Memorizar Tudo (Moonwalking with Einstein)", href: "Livros/A Arte e a Ciência de Memorizar Tudo (Moonwalking with Einstein).pdf" }
+  ].map(b => ({ ...b, href: LIBRARY_BASE + b.href }));
+
+  const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const booksIndex = books.map(b => ({ ...b, _norm: normalize(b.title) }));
 
   const commands = {
-    library:    { desc:'Acessar a Biblioteca',            run:()=> location.href='Biblioteca/index.html' },
+    library:    { desc:'Modo de busca na Biblioteca',     run:()=> setMode('library') },
     musics:     { desc:'Acessar Backup de Músicas',       run:()=> location.href='Músicas/index.html' },
     passwords:  { desc:'Baixar Backup de Senhas',         run:()=> download('Database.kdbx') },
     passphrase: { desc:'Baixar Decorar Pass Phrase',      run:()=> download('DecorarPassPhrase.py') },
@@ -366,31 +484,150 @@
   }
 
   // ----- mode handling -----
-  let mode = 'cmd'; // 'cmd' | 'youtube'
+  let mode = 'cmd'; // 'cmd' | 'youtube' | 'library'
   let lastTabPrefix = '';
+  let libActiveIndex = 0;
+  let libCurrentMatches = [];
 
   function setMode(next){
     mode = next;
     if (next === 'youtube'){
       body.classList.add('mode-youtube');
+      body.classList.remove('mode-library');
       sigil.textContent = 'youtube:search$';
       modeTag.textContent = 'youtube';
       input.value = '';
       input.placeholder = 'Search on YouTube...  ·  ENTER to search  ·  ESC to exit';
+    } else if (next === 'library'){
+      body.classList.add('mode-library');
+      body.classList.remove('mode-youtube');
+      sigil.textContent = 'library:search$';
+      modeTag.textContent = 'library';
+      input.value = '';
+      input.placeholder = 'Search book title...  ·  ENTER opens top match  ·  ESC to exit';
+      output.classList.remove('show');
+      renderLibrary('');
     } else {
       body.classList.remove('mode-youtube');
+      body.classList.remove('mode-library');
       sigil.textContent = 'mr.hr:~$';
       modeTag.textContent = 'cmd';
       input.placeholder = '>_ type a command  ·  TAB to autocomplete  ·  MAN for help';
+      libBox.innerHTML = '';
     }
     input.focus();
   }
 
+  // ----- library search -----
+  function scoreBook(query, normTitle){
+    if (!query) return 0;
+    if (normTitle.startsWith(query)) return 3;
+    // word-start match
+    if (normTitle.split(/[^a-z0-9]+/).some(w => w.startsWith(query))) return 2;
+    if (normTitle.includes(query)) return 1;
+    return 0;
+  }
+
+  function highlight(title, query){
+    if (!query) return escapeHtml(title);
+    const normTitle = normalize(title);
+    const i = normTitle.indexOf(query);
+    if (i < 0) return escapeHtml(title);
+    // map back to original-string indices (NFD removed combining marks, so length differs)
+    // simple approach: walk the original string and match positions where normalize equals
+    const out = [];
+    let normIdx = 0, origIdx = 0;
+    while (origIdx < title.length){
+      const seg = title[origIdx];
+      const segNormLen = normalize(seg).length;
+      const inMatch = normIdx >= i && normIdx < i + query.length;
+      out.push(inMatch ? `<mark>${escapeHtml(seg)}</mark>` : escapeHtml(seg));
+      normIdx += segNormLen;
+      origIdx++;
+    }
+    return out.join('').replace(/<\/mark><mark>/g,'');
+  }
+
+  function searchBooks(query){
+    if (!query){
+      // show all in stable order when empty
+      return booksIndex.map(b => ({...b, score: 0}));
+    }
+    return booksIndex
+      .map(b => ({...b, score: scoreBook(query, b._norm)}))
+      .filter(b => b.score > 0)
+      .sort((a,b) => b.score - a.score || a.title.localeCompare(b.title))
+      .slice(0, 12);
+  }
+
+  function renderLibrary(rawQuery){
+    const query = normalize(rawQuery.trim());
+    libCurrentMatches = searchBooks(query);
+    libActiveIndex = 0;
+
+    if (!libCurrentMatches.length){
+      libBox.innerHTML = `
+        <div class="lib-header"><span>// library</span><span class="lib-count">0 results</span></div>
+        <div class="lib-empty">no books matching "${escapeHtml(rawQuery)}"</div>
+      `;
+      return;
+    }
+
+    const items = libCurrentMatches.map((b, i) => {
+      const ext = (b.href.match(/\.([a-z0-9]+)(?:$|\?)/i) || [,''])[1];
+      return `<li data-i="${i}" class="${i===0?'active':''}">
+        <span class="lib-idx">${String(i+1).padStart(2,'0')}</span>
+        <span class="lib-title">${highlight(b.title, query)}</span>
+        <span class="lib-ext">${ext || 'file'}</span>
+      </li>`;
+    }).join('');
+
+    const headerLabel = query ? `${libCurrentMatches.length} results` : `${libCurrentMatches.length} books`;
+    libBox.innerHTML = `
+      <div class="lib-header"><span>// library ${query?'· search':'· all'}</span><span class="lib-count">${headerLabel}</span></div>
+      <ul>${items}</ul>
+      <div class="lib-footer">[ <b>↑/↓</b> navigate ] &nbsp; [ <b>enter</b> open ] &nbsp; [ <b>click</b> open ] &nbsp; [ <b>esc</b> exit ]</div>
+    `;
+  }
+
+  function setLibActive(idx){
+    if (!libCurrentMatches.length) return;
+    libActiveIndex = (idx + libCurrentMatches.length) % libCurrentMatches.length;
+    libBox.querySelectorAll('li').forEach(el => {
+      el.classList.toggle('active', Number(el.dataset.i) === libActiveIndex);
+    });
+    const activeEl = libBox.querySelector('li.active');
+    if (activeEl) activeEl.scrollIntoView({ block:'nearest' });
+  }
+
+  function openLibActive(){
+    const book = libCurrentMatches[libActiveIndex];
+    if (!book) return;
+    window.open(book.href, '_blank', 'noopener');
+  }
+
+  // click-to-open in library list
+  libBox.addEventListener('click', (e)=>{
+    const li = e.target.closest('li[data-i]');
+    if (!li) return;
+    libActiveIndex = Number(li.dataset.i);
+    openLibActive();
+  });
+
   // ----- key handlers -----
   input.addEventListener('keydown', (e)=>{
-    // ESC always exits youtube mode
+    // ESC always exits special modes
     if (e.key === 'Escape'){
-      if (mode === 'youtube'){ e.preventDefault(); setMode('cmd'); input.value=''; }
+      if (mode !== 'cmd'){ e.preventDefault(); setMode('cmd'); input.value=''; }
+      return;
+    }
+
+    // LIBRARY MODE: navigate + open
+    if (mode === 'library'){
+      if (e.key === 'ArrowDown'){ e.preventDefault(); setLibActive(libActiveIndex + 1); return; }
+      if (e.key === 'ArrowUp'){   e.preventDefault(); setLibActive(libActiveIndex - 1); return; }
+      if (e.key === 'Enter'){ e.preventDefault(); openLibActive(); return; }
+      // any other key → normal typing, results update via 'input' handler
       return;
     }
 
@@ -452,6 +689,10 @@
   });
 
   input.addEventListener('input', ()=>{
+    if (mode === 'library'){
+      renderLibrary(input.value);
+      return;
+    }
     if (input.value.toLowerCase() !== lastTabPrefix) lastTabPrefix = '';
   });
 

@@ -2,23 +2,76 @@
 <!-- Hospedagem: envie este arquivo como index.html. CSS, JavaScript, Three.js e modelo 3D estao incorporados. Requer navegador com WebGL. Os links de referencia sao opcionais. Modelo proprio; nao inclui o arquivo do GrabCAD. -->
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080c10"><meta name="description" content="Explore o motor universal em 3D: role para abrir, girar e compreender cada componente."><title>Motor universal — Por dentro</title><style>
 *{box-sizing:border-box}html{scroll-behavior:smooth;scrollbar-color:#ad7954 #080c10}body{margin:0;background:#080c10;color:#eeeae3;font-family:Arial,Helvetica,sans-serif;font-size:16px}header{position:fixed;inset:0 0 auto;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:28px 5vw;background:linear-gradient(#080c10,transparent)}a{color:inherit}.brand{text-decoration:none;font-size:17px;font-weight:700;letter-spacing:.12em}.brand span{display:block;font-size:10px;font-weight:400;letter-spacing:.17em;color:#a7aaa9;margin-top:8px}button{font:inherit;font-size:14px;background:#10171cc9;color:#d4d7d6;border:1px solid #45505a;padding:10px 17px;border-radius:30px;cursor:pointer}button:hover{border-color:#da9461}a:focus-visible,button:focus-visible{outline:2px solid #e7a071;outline-offset:5px}.scene{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 74% 47%,#20303b55,transparent 52%)}canvas{width:100%;height:100%;display:block}#fallback{position:absolute;right:10%;top:35%;width:32%;line-height:1.6;color:#efb585}main{position:relative;z-index:2;pointer-events:none}section{min-height:130svh;display:flex;align-items:center;padding:12vh 6vw}.copy{width:38%;max-width:520px;pointer-events:auto;opacity:0;transform:translateY(26px);transition:opacity .55s,transform .75s}.copy.visible{opacity:1;transform:none}h1,h2{font-size:clamp(44px,5.4vw,86px);line-height:1.04;letter-spacing:-.055em;margin:30px 0;font-weight:500}h2{font-size:clamp(40px,4.6vw,72px)}em{font-style:normal;color:#dca06f}.eyebrow{font-size:12px;letter-spacing:.16em;color:#bb8d68}p{font-size:clamp(17px,1.4vw,21px);line-height:1.65;color:#aeb7bb;max-width:365px}small{display:block;max-width:360px;line-height:1.65;color:#7f8d95;font-size:13px}.scroll{display:inline-flex;align-items:center;gap:32px;text-decoration:none;font-size:14px;margin-top:25px;padding-bottom:12px;border-bottom:1px solid #546069}.scroll span{color:#dca06f;font-size:23px}.detail{border-top:1px solid #3e4a53;padding-top:20px;margin-top:30px;color:#dca06f;font-size:12px;letter-spacing:.13em}.detail span{display:block;font-size:15px;color:#aeb7bb;letter-spacing:0;margin-top:10px}.equation{font-size:38px;letter-spacing:.08em;color:#dca06f;margin:26px 0}.circuit{font-size:14px;color:#dca06f;line-height:2.1;border-left:2px solid #dca06f;padding-left:17px;margin:28px 0}.technical{position:fixed;bottom:28px;left:51%;right:6%;display:flex;justify-content:space-between;gap:20px;color:#8d9ea8;font-size:10px;letter-spacing:.14em;z-index:4}.technical span:first-child{color:#dca06f}nav{position:fixed;z-index:10;right:24px;top:40%;display:flex;flex-direction:column;gap:10px}nav a{display:block;width:20px;height:16px;padding:7px 4px}nav a:after{content:'';display:block;width:9px;height:2px;background:#647078;transition:width .3s,background .3s}nav a[aria-current=true]:after{width:17px;background:#e5a779}.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:20}.progress i{display:block;height:100%;width:0;background:#dca06f}.source{display:block;font-size:12px;color:#82939d;margin-top:32px}.no-webgl .technical{display:none}@media(max-width:760px){header{padding:20px 6vw}.brand span{font-size:8px}button{font-size:12px;padding:9px 12px}section{min-height:140svh;align-items:flex-start;padding-top:20svh;padding-bottom:40svh}.copy{width:87%;max-width:450px}.copy p{font-size:17px;max-width:330px}h1,h2{font-size:50px;margin:20px 0}nav{right:10px}.technical{left:6%;bottom:18px;font-size:9px}.technical span:last-child{max-width:125px;text-align:right}#fallback{right:10%;top:65%;width:80%}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.copy{transition:none;transform:none}}
+/* Component tour: keep the longer chapter list inside the viewport. */
+nav{top:22%;max-height:58svh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#59656d transparent}
+.copy:not(.visible){pointer-events:none}
+[data-part] h2{font-size:clamp(38px,4.5vw,68px)}
+[data-part] .eyebrow{letter-spacing:.1em}
+canvas{pointer-events:auto;touch-action:pan-y;cursor:grab}
+canvas.dragging{cursor:grabbing}
+canvas:focus-visible{outline:2px solid #dca06f;outline-offset:-4px}
+.view-controls{position:fixed;z-index:5;right:6%;bottom:65px;display:flex;gap:16px;align-items:center;color:#aeb7bb;font-size:13px}
+.view-controls button{font-size:12px;padding:8px 12px}
+.no-webgl .view-controls{display:none}
+@media(max-width:760px){.view-controls{bottom:54px;right:6%;gap:12px}.view-controls span{font-size:12px}}
+
+[data-lesson] .copy{position:fixed;top:108px;left:7%;width:86%;max-width:none;text-align:center;transform:translateY(18px);transition:opacity .4s,transform .7s;pointer-events:none}
+[data-lesson] .copy.visible{transform:translateY(0)}
+[data-lesson] h2{font-size:clamp(28px,3.4vw,52px);margin:12px 0;letter-spacing:-.04em}
+[data-lesson] p{font-size:18px;max-width:none;margin:0}
+#comparison-ui{position:fixed;inset:0;z-index:3;pointer-events:none}
+#comparison-ui[hidden],#series-path[hidden]{display:none}
+.comparison-mode .scene{background:radial-gradient(ellipse at 50% 52%,#263c4c66,transparent 58%)}
+.visual-signs{position:absolute;top:38%;right:4%;width:13%;display:flex;flex-direction:column;justify-content:space-between;text-align:center;gap:26px}
+.visual-signs span{display:block;font-size:12px;letter-spacing:.15em;color:#b6c2c9}.visual-signs b{display:block;font-size:32px;font-weight:400;margin-top:6px;min-width:90px;color:#edb77f}
+.supply-readout{position:absolute;bottom:42px;left:20%;width:60%;display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap;font-size:14px}
+#signal{width:200px;height:46px;pointer-events:none;cursor:default}.supply-readout button{pointer-events:auto;font-size:13px;padding:8px 14px}.supply-readout small{flex-basis:100%;text-align:center;max-width:none;font-size:12px}
+#series-path{position:absolute;top:34%;left:20%;width:60%;display:flex;justify-content:center;gap:18px;align-items:center;font-size:13px;letter-spacing:.12em;color:#dca06f}#series-path i{font-style:normal;color:#f1dfcd}
+.comparison-mode .technical{display:none}.comparison-mode .view-controls{bottom:12px;right:5%}.comparison-mode .view-controls span{display:none}.no-webgl #comparison-ui{display:none}
+@media(max-width:760px){[data-lesson] .copy{top:100px;left:6%;width:86%}[data-lesson] h2{font-size:28px}[data-lesson] p{font-size:16px}.visual-signs{top:auto;left:8%;width:84%;bottom:190px;gap:4px;flex-direction:row}.visual-signs span{font-size:12px;letter-spacing:.03em}.visual-signs b{font-size:26px;min-width:70px}.supply-readout{left:6%;width:88%;bottom:62px;gap:10px}#signal{width:140px}#series-path{left:6%;width:88%;top:32%;gap:12px;font-size:12px}}
+@media(prefers-reduced-motion:reduce){[data-lesson] .copy{transition:none;transform:none}}
+
+.slide-controls{position:fixed;left:18px;top:43%;z-index:12;display:flex;flex-direction:column;gap:12px}.slide-controls button{width:44px;height:44px;padding:0;font-size:24px;background:#10171ce8}.slide-controls button:disabled{opacity:.25;cursor:default}
+[data-assembly] .copy{position:fixed;top:105px;left:8%;width:84%;max-width:none;text-align:center;pointer-events:none}[data-assembly] h2{font-size:clamp(28px,3.4vw,48px);margin:12px 0}.assembly-mode .technical{display:none}
+#exploded-labels,#pole-labels{position:fixed;inset:0;pointer-events:none;z-index:4}#exploded-labels[hidden],#pole-labels[hidden]{display:none}#exploded-labels svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}#exploded-labels line{stroke:#cda47c;stroke-width:1;opacity:.5}#exploded-labels span{position:absolute;transform:translate(-50%,-50%);font-size:13px;white-space:nowrap;background:#080c10dd;padding:5px 8px;border-radius:4px;color:#e2c6a7}
+#pole-labels span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-size:13px;font-weight:700;background:#080c10d9;border:1px solid currentColor;padding:4px 7px;border-radius:5px}
+.no-webgl #exploded-labels,.no-webgl #pole-labels{display:none}
+@media(max-width:760px){.slide-controls{left:7px;top:auto;bottom:18px;flex-direction:row;gap:8px}.slide-controls button{width:38px;height:38px;font-size:22px}[data-assembly] .copy{top:100px}#exploded-labels span{font-size:12px;padding:4px}#pole-labels span{font-size:12px;padding:3px 4px}.assembly-mode .view-controls{bottom:20px}}
+
+[data-finale] .copy{position:fixed;top:110px;left:8%;width:84%;max-width:none;text-align:center;pointer-events:none}[data-finale] h2{font-size:clamp(24px,3vw,40px);margin:14px 0}[data-finale] p{position:fixed;bottom:95px;left:8%;width:84%;max-width:none;text-align:center;font-size:18px;color:#c7d5e0;line-height:1.65}[data-finale] p strong{color:#f6bd83}[data-finale] .source{position:fixed;bottom:45px;left:40%;width:20%;margin:0;pointer-events:auto}.finale-mode .technical{display:none}.finale-mode .scene{background:radial-gradient(ellipse at center,#162535,#030609 75%)}.finale-mode .view-controls{bottom:18px}
+@media(max-width:760px){[data-finale] .copy{top:105px}[data-finale] p{font-size:15px;bottom:110px}[data-finale] .source{bottom:72px;left:20%;width:60%}}
 
 </style></head>
 <body>
 <header><a href="#inicio" class="brand">POR DENTRO<span>ENGENHARIA EM MOVIMENTO</span></a><button id="motion" aria-pressed="false">Pausar rotação</button></header>
-<div class="scene" aria-label="Modelo tridimensional didático de um motor universal"><canvas id="motor"></canvas><p id="fallback" hidden>Seu navegador não disponibilizou WebGL. Os capítulos abaixo continuam disponíveis, mas o modelo 3D não pôde ser exibido.</p></div>
+<div class="scene" aria-label="Modelo tridimensional didático de um motor universal"><canvas id="motor" tabindex="0" aria-label="Modelo 3D interativo. Arraste para girar ou use as setas do teclado."></canvas><p id="fallback" hidden>Seu navegador não disponibilizou WebGL. Os capítulos abaixo continuam disponíveis, mas o modelo 3D não pôde ser exibido.</p></div>
 <div class="technical"><span id="component">CONJUNTO COMPLETO</span><span>MODELO DIDÁTICO · SEM ESCALA</span></div>
+<div class="view-controls"><span>Arraste para girar</span><button id="reset-view" type="button">Restaurar vista</button></div>
+<div id="comparison-ui" hidden>
+ <div class="visual-signs"><div><span>CORRENTE</span><b id="current-sign">+</b></div><div><span id="field-label">ÍMÃS FIXOS</span><b id="field-sign">N · S</b></div><div><span>TORQUE</span><b id="torque-sign">↻</b></div></div>
+ <div class="supply-readout"><canvas id="signal" width="600" height="100" aria-label="Forma de onda da corrente, em câmera lenta"></canvas><span id="supply-label">CC</span><button id="half-cycle" type="button" hidden>Trocar semiciclo</button><small id="animation-note"></small></div>
+ <div id="series-path" hidden><span>CAMPO</span><i>→</i><span>ARMADURA</span><i>→</i><span>RETORNO</span></div>
+ </div>
+<div class="slide-controls" role="group" aria-label="Navegar pelos slides"><button id="previous-slide" type="button" aria-label="Slide anterior" title="Slide anterior">↑</button><button id="next-slide" type="button" aria-label="Próximo slide" title="Próximo slide">↓</button></div>
+<div id="exploded-labels" hidden><svg aria-hidden="true"></svg></div>
+<div id="pole-labels" hidden><span id="stator-pole-a"></span><span id="stator-pole-b"></span></div>
 <nav aria-label="Capítulos" id="chapters"></nav><div class="progress"><i id="progress"></i></div>
 <main>
-<section id="inicio"><div class="copy"><span class="eyebrow">01 / UMA MÁQUINA, DUAS CORRENTES</span><h1>Motor<br><em>universal.</em></h1><p>Por fora, compacto.<br>Por dentro, eletricidade se torna movimento.</p><a class="scroll" href="#corrente-continua">Role para explorar <span>↓</span></a></div></section>
-<section id="corrente-continua"><div class="copy"><span class="eyebrow">02 / A BASE: MOTOR CC COM ESCOVAS</span><h2>Corrente.<br>Campo.<br>Movimento.</h2><p>A corrente nas bobinas do rotor interage com o campo magnético do estator. Surgem forças que fazem o eixo girar.</p><p>As escovas levam corrente ao rotor. O comutador inverte a corrente de cada bobina na posição adequada para manter o torque no mesmo sentido.</p><small>O universal parte do motor CC série: campo e armadura ligados em série, com adaptações para funcionar também em CA. Nem todo motor CC pode receber CA.</small></div></section>
-<section id="abrir"><div class="copy"><span class="eyebrow">03 / ABRINDO O CONJUNTO</span><h2>Vamos<br>por partes.</h2><p>A carcaça se afasta. O rotor sai do estator. Cada peça revela uma função.</p><small>Vista explodida: separação ilustrativa, não uma sequência de manutenção.</small></div></section>
-<section id="estator"><div class="copy"><span class="eyebrow">04 / ESTATOR</span><h2>O campo<br>começa aqui.</h2><p>As bobinas fixas criam o campo magnético. O núcleo de chapas reduz perdas quando a alimentação é alternada.</p><div class="detail">FIXO <span>Bobinas de campo + núcleo laminado</span></div></div></section>
-<section id="rotor"><div class="copy"><span class="eyebrow">05 / ROTOR</span><h2>A parte<br>que gira.</h2><p>A corrente nas bobinas do rotor interage com o campo do estator. As forças produzem torque e movimentam o eixo.</p><div class="detail">MÓVEL <span>Armadura + enrolamentos + eixo</span></div></div></section>
-<section id="contato"><div class="copy"><span class="eyebrow">06 / ESCOVAS E COMUTADOR</span><h2>Contato fixo.<br>Corrente em giro.</h2><p>As escovas encostam nos segmentos de cobre do comutador. Enquanto ele gira, troca as conexões das bobinas para manter o torque útil.</p><small>Escovas não giram com o eixo. O contato causa desgaste.</small></div></section>
-<section id="serie"><div class="copy"><span class="eyebrow">07 / LIGAÇÃO EM SÉRIE</span><h2>A mesma<br>corrente.</h2><p>Campo e armadura fazem parte do mesmo circuito em série. A corrente atravessa ambos.</p><div class="circuit" aria-label="Fonte, campo, escova, armadura, escova e retorno"><span>Fonte</span> — <span>Campo</span> — <span>Escova</span><br>↳ <span>Armadura</span> — <span>Escova</span> — <span>Retorno</span></div></div></section>
-<section id="universal"><div class="copy"><span class="eyebrow">08 / POR QUE UNIVERSAL?</span><h2>Inverte a corrente.<br>Não o torque.</h2><p>Em CA, o campo e a corrente da armadura invertem juntos. O produto mantém o sinal: o torque continua no mesmo sentido.</p><div class="equation">T ∝ Φ · I</div><small>CC: sentidos constantes. CA: inversão conjunta.<br>Velocidade visual reduzida; não representa a frequência da rede.</small></div></section>
+<section id="inicio"><div class="copy"><span class="eyebrow">01 / UMA MÁQUINA, DUAS CORRENTES</span><h1>Motor<br><em>universal.</em></h1><p>Por fora, compacto.<br>Por dentro, eletricidade se torna movimento.</p><a class="scroll" href="#peca-estator">Conheça as peças <span>↓</span></a></div></section>
+<section id="peca-estator" data-part="estator"><div class="copy"><span class="eyebrow">CONHEÇA AS PEÇAS · 01 / 5</span><h2>Estator</h2><p>É a parte fixa. Suas bobinas produzem o campo magnético que atua sobre o rotor.</p><small>Componente isolado para observação.</small></div></section>
+<section id="peca-rotor" data-part="rotor"><div class="copy"><span class="eyebrow">CONHEÇA AS PEÇAS · 02 / 5</span><h2>Rotor / armadura</h2><p>É a parte girante com núcleo e enrolamentos. Nela, as forças magnéticas produzem o torque.</p><small>Componente isolado para observação.</small></div></section>
+<section id="peca-eixo" data-part="eixo"><div class="copy"><span class="eyebrow">CONHEÇA AS PEÇAS · 03 / 5</span><h2>Eixo</h2><p>Transmite a rotação do rotor para a ferramenta, hélice ou mecanismo acionado.</p><small>Componente isolado para observação.</small></div></section>
+<section id="peca-comutador" data-part="comutador"><div class="copy"><span class="eyebrow">CONHEÇA AS PEÇAS · 04 / 5</span><h2>Comutador</h2><p>Seus segmentos de cobre trocam as conexões das bobinas à medida que o rotor gira.</p><small>Componente isolado para observação.</small></div></section>
+<section id="peca-escovas" data-part="escovas"><div class="copy"><span class="eyebrow">CONHEÇA AS PEÇAS · 05 / 5</span><h2>Conjunto<br>de escovas.</h2><p>As escovas de carvão levam corrente ao comutador. O porta-escovas mantém o alinhamento, e a mola pressiona a escova para manter o contato.</p><small>Escova, porta-escovas e mola mostrados juntos.</small></div></section>
+<section id="explodida" data-assembly="exploded"><div class="copy"><span class="eyebrow">TODAS AS PEÇAS</span><h2>Por dentro do motor.</h2></div></section>
+<section id="remontagem" data-assembly="closed"><div class="copy"><span class="eyebrow">AS PEÇAS TRABALHAM JUNTAS</span><h2>Um só conjunto.</h2></div></section>
+<section id="comparar" data-lesson="dc"><div class="copy"><span class="eyebrow">01 / MOTOR CC</span><h2>Ímãs fixos. Giro contínuo.</h2></div></section>
+<section id="corrente-continua" data-lesson="ac"><div class="copy"><span class="eyebrow">02 / AGORA, CORRENTE ALTERNADA</span><h2>A corrente inverte.</h2><p>O campo dos ímãs permanece.</p></div></section>
+<section id="alternada" data-lesson="acproblem"><div class="copy"><span class="eyebrow">03 / O PROBLEMA</span><h2>O torque vai e volta.</h2><p>60 Hz → 120 inversões de corrente/s</p></div></section>
+<section id="serie" data-lesson="series"><div class="copy"><span class="eyebrow">04 / MOTOR UNIVERSAL</span><h2>Saem os ímãs. Entram as bobinas.</h2><p>Campo e armadura em série.</p></div></section>
+<section id="universal" data-lesson="result"><div class="copy"><span class="eyebrow">05 / A SOLUÇÃO</span><h2>Duas inversões. Mesmo sentido.</h2></div></section>
 <section id="fim"><div class="copy"><span class="eyebrow">09 / DE VOLTA AO CONJUNTO</span><h2>Pequeno.<br>Rápido.<br><em>Universal.</em></h2><p>Presente em muitas ferramentas, aspiradores e liquidificadores. Alta rotação em pouco espaço — com ruído e desgaste das escovas.</p><a class="scroll" href="#inicio">Explorar novamente <span>↑</span></a><a class="source" href="https://www.nidec.com/en/technology/motor/basic/00025/" target="_blank" rel="noopener noreferrer">Referência técnica: motor universal — Nidec ↗</a><a class="source" href="https://www.nidec.com/en/products/small-precision-motors/contents/technology/motor/basic/00004/" target="_blank" rel="noopener noreferrer">Princípio do motor CC — Nidec ↗</a></div></section>
+<section id="rock" data-finale="true"><div class="copy"><span class="eyebrow">UMA ÚLTIMA CURIOSIDADE</span><h2>Até o rock é elétrico.</h2><p>O nome da banda vem da eletricidade.<br><strong>AC</strong> · corrente alternada &nbsp; / &nbsp; <strong>DC</strong> · corrente contínua</p><a class="source" href="https://en.wikipedia.org/wiki/AC/DC#Name" target="_blank" rel="noopener noreferrer">A origem do nome ↗</a></div></section>
 </main><script>
 /* Motor universal: self-contained browser distribution. */
 (()=>{
@@ -55018,6 +55071,8 @@ function createMotor() {
  const part=name=>{const g=new T.Group();g.name=name;root.add(g);return g};
  const shell=part('Carcaça bipartida'),stator=part('Estator laminado'),rotor=part('Armadura e eixo'),comm=part('Comutador'),brushes=part('Porta-escovas');
  const ends=[part('Mancal dianteiro'),part('Mancal traseiro')];
+ const nested=(parent,name)=>{const g=new T.Group();g.name=name;parent.add(g);return g};
+ const shaft=nested(rotor,'Eixo'),fan=nested(rotor,'Ventilador'),bearingParts=[],carbonParts=[],springParts=[];
  const material=(color,metalness,roughness,extra={})=>new T.MeshPhysicalMaterial({color,metalness,roughness,...extra});
  const m={steel:material(0x9ca4ab,.92,.28),lamina:material(0x66717a,.88,.38),edge:material(0x323b42,.8,.44),cast:material(0x8d959a,.78,.42),shell:material(0x37434c,.75,.32),copper:material(0xb76a32,.78,.27,{clearcoat:.5,clearcoatRoughness:.2}),wire:material(0xc17a3d,.7,.26,{clearcoat:.65,clearcoatRoughness:.16}),varnish:material(0x9c5228,.65,.3,{clearcoat:.6}),brass:material(0xb4934d,.84,.3),black:material(0x12171b,.1,.72),carbon:material(0x333539,.08,.9),paper:material(0xb1a28a,.03,.86)};
  function add(g,geo,mat,x=0,y=0,z=0){const o=new T.Mesh(geo,mat);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;g.add(o);return o}
@@ -55030,9 +55085,9 @@ function createMotor() {
  function torus(g,x,r,t,mat){const geo=new T.TorusGeometry(r,t,8,64);geo.rotateY(Math.PI/2);return add(g,geo,mat,x)}
  function bolt(g,x,y,z){washer(g,x,.075,.043,.022,m.steel).position.set(x,y,z);cylinder(g,.053,.065,x+.035,m.steel,6).position.set(x+.035,y,z);box(g,x+.07,y,z,.006,.014,.064,m.black)}
  // Machined shaft: bearing seats, shoulders and keyway.
- cylinder(rotor,.13,5.18,0,m.steel);cylinder(rotor,.17,2.3,0,m.steel);
- for(const x of [-1.86,1.97]){cylinder(rotor,.155,.25,x,m.steel);torus(rotor,x+.13,.142,.013,m.black)}
- box(rotor,-2.28,.126,0,.42,.018,.055,m.black);
+ cylinder(shaft,.13,5.18,0,m.steel);cylinder(shaft,.17,2.3,0,m.steel);
+ for(const x of [-1.86,1.97]){cylinder(shaft,.155,.25,x,m.steel);torus(shaft,x+.13,.142,.013,m.black)}
+ box(shaft,-2.28,.126,0,.42,.018,.055,m.black);
  // Sixteen open slots in every armature lamination, not a stack of rings.
  const slotCount=16,section=new T.Shape();let first=true;
  for(let k=0;k<slotCount;k++)for(const [f,r] of [[0,.665],[.31,.665],[.39,.535],[.61,.535],[.69,.665],[1,.665]]){const a=(k+f)*Math.PI*2/slotCount,y=Math.cos(a)*r,z=Math.sin(a)*r;if(first){section.moveTo(y,z);first=false}else section.lineTo(y,z)}section.closePath();
@@ -55078,10 +55133,11 @@ function createMotor() {
  const brushGroups=[];
  for(const sign of [-1,1]){
   const g=new T.Group();g.userData.sign=sign;brushes.add(g);brushGroups.push(g);
-  box(g,1.50,sign*.49,0,.27,.27,.24,m.carbon);
+  const carbonGroup=nested(g,'Escova'),springGroup=nested(g,'Mola');carbonParts.push(carbonGroup);springParts.push(springGroup);
+  box(carbonGroup,1.50,sign*.49,0,.27,.27,.24,m.carbon);
   box(g,1.50,sign*.71,0,.43,.24,.40,m.black);
   for(const z of [-.205,.205])box(g,1.50,sign*.73,z,.43,.28,.04,m.brass);
-  const points=[];for(let j=0;j<=140;j++){let t=j/140;points.push([1.5+Math.cos(t*Math.PI*14)*.09,sign*(.63+t*.40),Math.sin(t*Math.PI*14)*.09])}tube(g,points,.012,m.steel,false,140);
+  const points=[];for(let j=0;j<=140;j++){let t=j/140;points.push([1.5+Math.cos(t*Math.PI*14)*.09,sign*(.63+t*.40),Math.sin(t*Math.PI*14)*.09])}tube(springGroup,points,.012,m.steel,false,140);
   box(g,1.5,sign*1.06,0,.43,.045,.38,m.brass);
   tube(g,[[1.57,sign*.60,.14],[1.72,sign*.80,.22],[1.72,sign*1.05,.2]],.018,m.copper,false,24);
   bolt(g,1.72,sign*.79,0);
@@ -55090,15 +55146,16 @@ function createMotor() {
  ends.forEach((g,i)=>{
   const x=i===0?-1.51:2.0;
   washer(g,x,1.37,1.16,.15,m.cast);washer(g,x,.43,.275,.20,m.cast);
-  washer(g,x,.27,.155,.24,m.steel);washer(g,x+.125,.235,.18,.01,m.black);washer(g,x+.132,.225,.192,.012,m.steel);
+  const bearing=nested(g,'Rolamento');bearingParts.push(bearing);
+  washer(bearing,x,.27,.155,.24,m.steel);washer(bearing,x+.125,.235,.18,.01,m.black);washer(bearing,x+.132,.225,.192,.012,m.steel);
   for(let j=0;j<5;j++){const a=j*Math.PI*2/5;const o=box(g,x,Math.cos(a)*.77,Math.sin(a)*.77,.14,.76,.13,m.cast);o.rotation.x=a;
    bolt(g,x+.09,Math.cos(a)*1.27,Math.sin(a)*1.27);
   }
   for(const s of [-1,1]){box(g,x,-1.16,s*.80,.42,.24,.32,m.cast);bolt(g,x+.22,-1.16,s*.80)}
  });
  // Cooling impeller is attached to the armature, not to the stationary cover.
- cylinder(rotor,.3,.13,-1.25,m.black);washer(rotor,-1.28,.93,.27,.045,m.black);
- for(let i=0;i<12;i++){const a=i*Math.PI/6,o=box(rotor,-1.20,Math.cos(a)*.6,Math.sin(a)*.6,.14,.58,.055,m.black);o.rotation.x=a+.32}
+ cylinder(fan,.3,.13,-1.25,m.black);washer(fan,-1.28,.93,.27,.045,m.black);
+ for(let i=0;i<12;i++){const a=i*Math.PI/6,o=box(fan,-1.20,Math.cos(a)*.6,Math.sin(a)*.6,.14,.58,.055,m.black);o.rotation.x=a+.32}
  // Thick split shroud with actual ventilation openings formed by metal ribs.
  const halves=[];
  for(let side=0;side<2;side++){
@@ -55124,9 +55181,10 @@ function createMotor() {
    const geo=new T.BufferGeometry();geo.setAttribute('position',new T.BufferAttribute(concat(positions),3));geo.setAttribute('normal',new T.BufferAttribute(concat(normals),3));geo.setAttribute('uv',new T.BufferAttribute(concat(uvs),2));geo.computeBoundingSphere();add(g,geo,material);
   }
  }
- const groups=[stator,rotor,comm,...ends,...halves,...brushGroups];groups.forEach(batch);
+ const groups=[stator,rotor,comm,shaft,fan,...bearingParts,...ends,...halves,...brushGroups];groups.forEach(batch);
  root.userData.description='Unbranded, dimensional reconstruction; not manufacturer CAD.';
- return {root,shell,stator,rotor,comm,brushes,ends,halves,brushGroups,materials:m};
+ const exhibits={estator:[stator],rotor:[rotor],eixo:[shaft],comutador:[comm],escovas:[brushGroups[0]]};
+ return {root,shell,stator,rotor,comm,brushes,ends,halves,brushGroups,exhibits,materials:m};
 }
 
 // Reflections from a studio light rig, prefiltered for physically based metal.
@@ -55138,18 +55196,174 @@ function createStudio(renderer){
 }
 
 
+// Ideal sign model; current lag, saturation and shaft dynamics are not simulated.
+function comparisonSigns(lesson,sign){const current=lesson==='dc'?1:sign;return {current,dcField:1,dcTorque:current,universalField:current,universalTorque:1}}
+// One representative coil: mechanical position rotates; commutation reverses its polarity
+// every half-turn. Its torque m × B stays positive in DC and series-universal operation.
+function rotorPolarity(angle,current){return -(Math.sin(angle+Math.PI/2)>=0?1:-1)*current}
+function createComparison(source){
+ const root=new T.Group(),g=new T.Group();root.add(g);
+ const rotor=source.rotor.clone(true),comm=source.comm.clone(true),brushes=source.brushes.clone(true);
+ const fan=rotor.getObjectByName('Ventilador');if(fan)fan.parent.remove(fan);g.add(rotor,comm,brushes);
+ const stator=source.stator.clone(true);g.add(stator);
+ stator.traverse(o=>{if(o.isMesh&&[source.materials.lamina,source.materials.edge].includes(o.material)){o.material=o.material.clone();o.material.transparent=true;o.material.opacity=.12;o.material.depthWrite=false}});
+ const north=0xee765d,south=0x65b6ef,poles=[],coilPoles=[];
+ function sector(inner,outer,start,length,material){const shape=new T.Shape();shape.absarc(0,0,outer,start,start+Math.PI*.5,false);shape.absarc(0,0,inner,start+Math.PI*.5,start,true);shape.closePath();const geo=new T.ExtrudeGeometry(shape,{depth:length,bevelEnabled:false,curveSegments:32});geo.translate(0,0,-length/2);geo.rotateY(Math.PI/2);return new T.Mesh(geo,material)}
+ for(let i=0;i<2;i++){
+  const p=sector(.73,1.05,Math.PI*(.25+i),1.7,new T.MeshPhysicalMaterial({color:i?north:south,metalness:.3,roughness:.33,transparent:true}));g.add(p);poles.push(p);
+  const c=sector(.70,.74,Math.PI*(.25+i),1.5,new T.MeshBasicMaterial({color:i?north:south,transparent:true,opacity:.6}));stator.add(c);coilPoles.push(c);
+ }
+ // Large torque arrow in the shaft's YZ plane.
+ const torque=new T.Group();g.add(torque);torque.position.x=-2.45;
+ const arrowMaterial=new T.MeshBasicMaterial({color:0xedb77f}),theta=Math.PI*1.55;
+ const arc=new T.Mesh(new T.TorusGeometry(.65,.025,8,64,theta),arrowMaterial);arc.rotation.y=Math.PI/2;torque.add(arc);
+ const tip=new T.Mesh(new T.ConeGeometry(.11,.24,16),arrowMaterial);tip.position.set(0,.65*Math.sin(theta),-.65*Math.cos(theta));tip.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),new T.Vector3(0,Math.cos(theta),Math.sin(theta)));torque.add(tip);
+ const fieldArrows=[];for(let i=0;i<3;i++){const arrow=new T.ArrowHelper(new T.Vector3(0,1,0),new T.Vector3((i-1)*.42,-.68,0),1.36,0x74bfea,.18,.09);g.add(arrow);fieldArrows.push(arrow)}
+ const markers=Array.from({length:2},()=>({point:new T.Vector3(),pole:'N'}));
+ const wireCurve=new T.CatmullRomCurve3([new T.Vector3(-1.5,-1.55,.1),new T.Vector3(-.5,-1.55,.1),new T.Vector3(.4,-1.3,.1),new T.Vector3(.9,-.55,.1),new T.Vector3(.7,.65,.1),new T.Vector3(-.8,.7,.1),new T.Vector3(-1.7,.4,.1),new T.Vector3(-1.9,-.7,.1)],true);
+ const wire=new T.Mesh(new T.TubeGeometry(wireCurve,96,.014,6,true),new T.MeshBasicMaterial({color:0xc99562,transparent:true,opacity:.45}));g.add(wire);
+ const particles=[];for(let i=0;i<9;i++){const p=new T.Mesh(new T.SphereGeometry(.04,8,6),new T.MeshBasicMaterial({color:0xffd6a2}));g.add(p);particles.push(p)}
+ let blend=0,pose=-.45,rotorAngle=0,lastTime=null,particlePhase=0,entry=0;
+ function update(lesson,sign,time,rotation,width,height,dt=.016,reduced=false){
+  const universal=['series','result'].includes(lesson),values=comparisonSigns(lesson,sign),ease=reduced?1:1-Math.exp(-dt*3.7);
+  blend+=(Number(universal)-blend)*ease;entry+=(1-entry)*ease;
+  const desiredPose=lesson==='acproblem'?-.14:lesson==='series'?-.65:-.45;pose+=(desiredPose-pose)*ease;
+  const halfWidth=14*Math.tan(16*Math.PI/180)*width/height,scale=Math.min(1.53,halfWidth*.79/3.25);
+  g.position.set(0,.02,0);g.scale.setScalar(scale*(.9+.1*entry));g.rotation.set(.25,pose,-.06);g.quaternion.premultiply(rotation);
+  // Permanent magnets explode radially; field windings enter along the shaft.
+  for(let i=0;i<2;i++){poles[i].position.y=(i?1:-1)*blend*2.3;poles[i].material.opacity=1-blend;poles[i].visible=blend<.995}
+  stator.visible=blend>.005;stator.position.x=(1-blend)*3.8;stator.scale.setScalar(.75+.25*blend);
+  const elapsed=lastTime===null?0:Math.max(0,time-lastTime);lastTime=time;
+  if(lesson==='dc'||universal)rotorAngle+=elapsed*1.25;
+  // No false claim that the PMDC shaft follows every current reversal.
+  rotor.rotation.x=rotorAngle;comm.rotation.x=rotorAngle;
+  const field=universal?values.current:1,torqueSign=universal?1:values.current;
+  for(let i=0;i<2;i++){const side=i===0?1:-1;markers[i].point.set(.65,side*1.35,0);markers[i].pole=field*side>0?'S':'N'}
+  coilPoles.forEach((p,i)=>p.material.color.setHex((i===0)===(field>0)?south:north));
+  fieldArrows.forEach(a=>{a.position.y=field>0?-.68:.68;a.setDirection(new T.Vector3(0,field,0));a.setColor(field>0?0xee765d:0x65b6ef);a.visible=lesson!=='dc'});
+  arrowMaterial.color.setHex(torqueSign>0?0xedb77f:0x74bfea);
+  torque.scale.set(.95+.08*Math.abs(Math.sin(time*2)),torqueSign,1);
+  wire.visible=universal;particlePhase+=elapsed*values.current*.17;
+  particles.forEach((p,i)=>{p.visible=universal;p.position.copy(wireCurve.getPointAt(((i/particles.length+particlePhase)%1+1)%1))});
+  return values;
+ }
+ return {root,g,rotor,stator,poles,torque,fieldArrows,markers,update};
+}
 
-const sections=[...document.querySelectorAll('section')],nav=document.querySelector('nav'),motion=document.querySelector('#motion'),reduce=matchMedia('(prefers-reduced-motion: reduce)');
+
+function createFinale(){
+ const root=new T.Group();root.visible=false;
+ const lettering=new T.Group();root.add(lettering);
+ const contours=[[[0.53422,0.13281],[0.24031,0.13281],[0.19391,0],[0.00484,0],[0.27484,0.72906],[0.49906,0.72906],[0.76906,0],[0.58016,0],[0.53422,0.13281]],[[0.28719,0.26813],[0.48688,0.26813],[0.38719,0.55812],[0.28719,0.26813]],[[1.44393,0.04],[1.391,0.01645],[1.33596,-0.00047],[1.27861,-0.01078],[1.21877,-0.01422],[1.05553,0.01125],[0.93018,0.08766],[0.85037,0.20762],[0.82377,0.36375],[0.85037,0.52031],[0.93018,0.64031],[1.05553,0.71672],[1.21877,0.74219],[1.27861,0.73875],[1.33596,0.72844],[1.391,0.71152],[1.44393,0.68797],[1.44393,0.53719],[1.39197,0.56805],[1.3408,0.58937],[1.28869,0.6018],[1.23393,0.60594],[1.14404,0.5898],[1.07564,0.54141],[1.03252,0.4648],[1.01814,0.36375],[1.03252,0.26301],[1.07564,0.18641],[1.14404,0.13812],[1.23393,0.12203],[1.28869,0.12617],[1.3408,0.13859],[1.39197,0.16004],[1.44393,0.19094],[1.44393,0.04]],[[1.76469,0.72906],[1.87312,0.72906],[1.61578,-0.09281],[1.50781,-0.09281],[1.76469,0.72906]],[[2.15289,0.58688],[2.15289,0.14203],[2.22023,0.14203],[2.3218,0.15633],[2.39617,0.19922],[2.44188,0.26934],[2.45711,0.36531],[2.44195,0.46066],[2.39648,0.53016],[2.32219,0.5727],[2.22023,0.58688],[2.15289,0.58688]],[[1.96492,0.72906],[2.16305,0.72906],[2.30793,0.72313],[2.41039,0.70531],[2.48586,0.67344],[2.54977,0.625],[2.59441,0.57184],[2.62586,0.51109],[2.64461,0.44246],[2.65086,0.36531],[2.64461,0.28715],[2.62586,0.21797],[2.59441,0.15715],[2.54977,0.10406],[2.48531,0.05559],[2.40914,0.02359],[2.3066,0.0059],[2.16305,0],[1.96492,0],[1.96492,0.72906]],[[3.37312,0.04],[3.3202,0.01645],[3.26516,-0.00047],[3.20781,-0.01078],[3.14797,-0.01422],[2.98473,0.01125],[2.85938,0.08766],[2.77957,0.20762],[2.75297,0.36375],[2.77957,0.52031],[2.85938,0.64031],[2.98473,0.71672],[3.14797,0.74219],[3.20781,0.73875],[3.26516,0.72844],[3.3202,0.71152],[3.37312,0.68797],[3.37312,0.53719],[3.32117,0.56805],[3.27,0.58937],[3.21789,0.6018],[3.16312,0.60594],[3.07324,0.5898],[3.00484,0.54141],[2.96172,0.4648],[2.94734,0.36375],[2.96172,0.26301],[3.00484,0.18641],[3.07324,0.13812],[3.16312,0.12203],[3.21789,0.12617],[3.27,0.13859],[3.32117,0.16004],[3.37312,0.19094],[3.37312,0.04]]];
+ const path=new T.ShapePath();for(const points of contours){path.moveTo(...points[0]);for(const p of points.slice(1))path.lineTo(...p)}
+ const geo=new T.ExtrudeGeometry(path.toShapes(false),{depth:.12,bevelEnabled:true,bevelThickness:.016,bevelSize:.012,bevelSegments:3,curveSegments:12});
+ geo.computeBoundingBox();const center=geo.boundingBox.getCenter(new T.Vector3());geo.translate(-center.x,-center.y,-center.z);geo.scale(3.25,3.25,3.25);
+ const stone=new T.MeshStandardMaterial({color:0x87909a,roughness:.96,metalness:.05});
+ stone.onBeforeCompile=shader=>{
+  shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 rockPoint;').replace('#include <begin_vertex>','#include <begin_vertex>\nrockPoint=position;');
+  shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
+varying vec3 rockPoint;
+float rockHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float rockNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(mix(rockHash(i),rockHash(i+vec3(1,0,0)),f.x),mix(rockHash(i+vec3(0,1,0)),rockHash(i+vec3(1,1,0)),f.x),f.y),mix(mix(rockHash(i+vec3(0,0,1)),rockHash(i+vec3(1,0,1)),f.x),mix(rockHash(i+vec3(0,1,1)),rockHash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+`).replace('#include <color_fragment>',`#include <color_fragment>
+float grain=rockNoise(rockPoint*35.);float strata=rockNoise(rockPoint*5.);
+float crack=smoothstep(.02,.075,abs(sin(rockPoint.x*4.+rockPoint.y*8.+strata*5.)));
+diffuseColor.rgb*=mix(.27,1.23,grain*.35+strata*.65)*mix(.4,1.,crack);
+`);
+ };
+ const letters=new T.Mesh(geo,stone);letters.castShadow=true;letters.receiveShadow=true;lettering.add(letters);
+ const clouds=new T.Group();root.add(clouds);
+ const cloudMaterials=[];
+ for(let i=0;i<2;i++){
+  const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{clock:{value:0},strength:{value:.8},flash:{value:0},layer:{value:i}},vertexShader:`varying vec2 uvCloud;void main(){uvCloud=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`
+varying vec2 uvCloud;uniform float clock;uniform float strength;uniform float flash;uniform float layer;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float n=0.,a=.5;for(int j=0;j<5;j++){n+=a*noise(p);p=p*2.04+3.1;a*=.5;}return n;}
+void main(){vec2 p=uvCloud*vec2(6.,3.);p.x+=clock*.045*(layer==0.?1.:-1.);p.y+=layer*3.;float n=fbm(p+fbm(p*.8));float edge=smoothstep(0.,.15,uvCloud.y)*smoothstep(0.,.18,1.-uvCloud.y)*smoothstep(0.,.14,uvCloud.x)*smoothstep(0.,.14,1.-uvCloud.x);float density=smoothstep(.25,.7,n);vec3 color=mix(vec3(.027,.045,.065),vec3(.25,.31,.38),n);color+=vec3(.35,.48,.65)*flash;gl_FragColor=vec4(color,density*edge*strength);}
+`});
+  cloudMaterials.push(mat);const plane=new T.Mesh(new T.PlaneGeometry(29,13),mat);plane.position.set(0,i?-.8:2,-5-i);clouds.add(plane);
+ }
+ const bolts=new T.Group();root.add(bolts);const boltMaterial=new T.MeshBasicMaterial({color:0xcbeaff,transparent:true,opacity:0});
+ for(let side of [-1,1]){
+  const points=[[side*4.7,4.8,-3],[side*4.2,3.7,-2.8],[side*4.5,3.1,-2.7],[side*3.7,2.5,-2.5],[side*4.1,2.1,-2.4],[side*2.9,.7,-2]];
+  const curve=new T.CurvePath();for(let i=1;i<points.length;i++)curve.add(new T.LineCurve3(new T.Vector3(...points[i-1]),new T.Vector3(...points[i])));
+  bolts.add(new T.Mesh(new T.TubeGeometry(curve,48,.028,6,false),boltMaterial));
+  const branch=new T.CurvePath();branch.add(new T.LineCurve3(new T.Vector3(...points[2]),new T.Vector3(side*5.1,2.65,-2.7)));branch.add(new T.LineCurve3(new T.Vector3(side*5.1,2.65,-2.7),new T.Vector3(side*5.5,1.9,-2.5)));bolts.add(new T.Mesh(new T.TubeGeometry(branch,12,.013,5,false),boltMaterial));
+ }
+ const light=new T.PointLight(0xaaccff,0,35,1.5);light.position.set(0,4,3);root.add(light);
+ const rim=new T.DirectionalLight(0x8aaee8,2);rim.position.set(-3,4,5);root.add(rim);
+ let wasActive=false,reveal=0,time=0;
+ function update(active,dt,width,height,paused,reduced){
+  root.visible=active;if(!active){wasActive=false;return}
+  if(!wasActive){reveal=0;time=0;wasActive=true}
+  reveal=reduced?4:Math.min(4,reveal+dt);if(!paused&&!reduced)time+=dt;
+  const progress=reduced?1:T.MathUtils.smoothstep(reveal,.75,2.8);
+  const fit=Math.min(1,14*Math.tan(16*Math.PI/180)*width/height*.9/5.8);
+  lettering.scale.setScalar(fit*(.8+.2*progress));lettering.position.set(0,.7+(1-progress)*2,-1.5-(1-progress)*3);lettering.rotation.set(.05*(1-progress),-.2*(1-progress),0);lettering.visible=progress>0;
+  // One brief reveal, then widely spaced flashes; reduced motion keeps a still scene.
+  const phase=time%8;const pulse=(!paused&&!reduced)?Math.max(0,1-Math.abs(phase-1.1)/.24):0;
+  boltMaterial.opacity=pulse;bolts.visible=pulse>.005;bolts.scale.setScalar(fit);light.intensity=pulse*35;
+  cloudMaterials.forEach(m=>{m.uniforms.clock.value=time;m.uniforms.flash.value=pulse;m.uniforms.strength.value=.8});
+ }
+ return {root,lettering,letters,bolts,cloudMaterials,update};
+}
+
+
+
+
+
+const sections=[...document.querySelectorAll('section')],nav=document.querySelector('#chapters'),motion=document.querySelector('#motion'),reduce=matchMedia('(prefers-reduced-motion: reduce)');
 sections.forEach(s=>{const a=document.createElement('a');a.href='#'+s.id;a.title=s.querySelector('.eyebrow').textContent;a.setAttribute('aria-label',a.title);nav.append(a)});
-const observer=new IntersectionObserver(es=>es.forEach(e=>e.target.querySelector('.copy').classList.toggle('visible',e.isIntersecting)),{threshold:.12});sections.forEach(s=>observer.observe(s));
-let paused=reduce.matches;function showMotion(){motion.textContent=paused?'Ativar rotação':'Pausar rotação';motion.setAttribute('aria-pressed',String(paused))}showMotion();motion.onclick=()=>{paused=!paused;showMotion()};
+const previousSlide=document.getElementById('previous-slide'),nextSlide=document.getElementById('next-slide');
+let activeChapter=-1,navigationTarget=null,navigationTimer;
+function goSlide(delta){const i=Math.max(0,Math.min(sections.length-1,(navigationTarget??activeChapter)+delta));navigationTarget=i;sections[i].scrollIntoView({behavior:reduce.matches?'instant':'smooth',block:'start'});clearTimeout(navigationTimer);navigationTimer=setTimeout(()=>navigationTarget=null,900)}
+previousSlide.onclick=()=>goSlide(-1);nextSlide.onclick=()=>goSlide(1);
+addEventListener('wheel',()=>navigationTarget=null,{passive:true});addEventListener('touchstart',()=>navigationTarget=null,{passive:true});
+function syncChapter(){let n=0;while(n<sections.length-1&&scrollY+innerHeight*.5>=sections[n+1].offsetTop)n++;
+ if(n!==activeChapter){activeChapter=n;previousSlide.disabled=n===0;nextSlide.disabled=n===sections.length-1;sections.forEach((s,i)=>s.querySelector('.copy').classList.toggle('visible',i===n));[...nav.children].forEach((a,i)=>a.setAttribute('aria-current',String(i===n)));nav.scrollTop=Math.max(0,nav.children[n].offsetTop-nav.clientHeight/2)}return n}
+addEventListener('scroll',syncChapter,{passive:true});syncChapter();
+let paused=reduce.matches;function showMotion(){motion.textContent=paused?'Ativar animação':'Pausar animação';motion.setAttribute('aria-pressed',String(paused))}showMotion();motion.onclick=()=>{paused=!paused;showMotion()};
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v)),smooth=v=>{v=clamp(v);return v*v*(3-2*v)},lerp=(a,b,t)=>a+(b-a)*t;
 let renderer;try{renderer=new T.WebGLRenderer({canvas:document.querySelector('canvas'),antialias:true,alpha:true,powerPreference:'high-performance'})}catch{document.body.classList.add('no-webgl');document.querySelector('#fallback').hidden=false;motion.hidden=true}
 if(renderer){
  renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));renderer.setClearColor(0x080c10,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  const scene=new T.Scene(),camera=new T.PerspectiveCamera(32,innerWidth/innerHeight,.1,100);
+ // Manual orientation is independent of the scroll-controlled pose.
+ const canvas=renderer.domElement,userRotation=new T.Quaternion();
+ const stepRotation=new T.Quaternion(),horizontalAxis=new T.Vector3(0,1,0),verticalAxis=new T.Vector3(1,0,0);
+ let drag=null;
+ const pauseForInspection=()=>{paused=true;showMotion()};
+ function rotateBy(dx,dy){pauseForInspection();stepRotation.setFromAxisAngle(horizontalAxis,dx*.008);userRotation.premultiply(stepRotation);stepRotation.setFromAxisAngle(verticalAxis,dy*.008);userRotation.premultiply(stepRotation).normalize()}
+ canvas.addEventListener('pointerdown',event=>{
+  if(event.button!==0||!event.isPrimary)return;
+  if(innerWidth>=760&&!sections[activeChapter]?.dataset.finale&&!sections[activeChapter]?.dataset.lesson&&!sections[activeChapter]?.dataset.assembly&&event.clientX<innerWidth*.42)return;
+  if(innerWidth<760&&event.clientY<innerHeight*.5)return;
+  drag={id:event.pointerId,x:event.clientX,y:event.clientY};canvas.setPointerCapture(event.pointerId);canvas.classList.add('dragging');
+ });
+ canvas.addEventListener('pointermove',event=>{if(!drag||drag.id!==event.pointerId)return;const dx=event.clientX-drag.x,dy=event.clientY-drag.y;drag.x=event.clientX;drag.y=event.clientY;if(dx||dy)rotateBy(dx,dy)});
+ const endDrag=event=>{if(!drag||drag.id!==event.pointerId)return;if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);drag=null;canvas.classList.remove('dragging')};
+ canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);canvas.addEventListener('lostpointercapture',endDrag);
+ canvas.addEventListener('keydown',event=>{const delta={ArrowLeft:[-12,0],ArrowRight:[12,0],ArrowUp:[0,-12],ArrowDown:[0,12]}[event.key];if(delta){event.preventDefault();rotateBy(...delta)}});
+ document.querySelector('#reset-view').addEventListener('click',()=>userRotation.identity());
  const model=createMotor(),{root,shell,stator,rotor,comm,brushes,ends,halves,brushGroups}=model;scene.add(root);camera.position.set(0,0,14);
+ const finale=createFinale();scene.add(finale.root);
+ const comparison=createComparison(model);scene.add(comparison.root);comparison.root.visible=false;
+ const comparisonUI=document.querySelector('#comparison-ui'),halfCycle=document.querySelector('#half-cycle');
+ const ui=Object.fromEntries(['field-label','field-sign','torque-sign','supply-label','current-sign','animation-note'].map(id=>[id,document.getElementById(id)]));
+ let lessonTime=.7,manualSign=null;
+ const signal=document.getElementById("signal"),signalCtx=signal.getContext("2d");
+ halfCycle.addEventListener('click',()=>{pauseForInspection();manualSign=-(manualSign??(Math.sin(lessonTime*Math.PI*.65)>=0?1:-1))});
+ const exhibitRoot=new T.Group();scene.add(exhibitRoot);const exhibits={};
+ for(const [name,sources] of Object.entries(model.exhibits)){
+  const turntable=new T.Group(),content=new T.Group();turntable.add(content);
+  for(const original of sources){const copy=original.clone(true);copy.position.set(0,0,0);copy.rotation.set(0,0,0);
+   const excluded=name==='rotor'?['Eixo','Ventilador']:name==='suportes'?['Escova','Mola']:name==='tampas'?['Rolamento']:[];
+   for(const childName of excluded){const child=copy.getObjectByName(childName);child?.parent.remove(child)}content.add(copy)}
+  const bounds=new T.Box3().setFromObject(content),center=bounds.getCenter(new T.Vector3()),size=bounds.getSize(new T.Vector3());content.position.sub(center);
+  turntable.scale.setScalar(3.25/Math.max(size.x,size.y,size.z));turntable.visible=false;exhibitRoot.add(turntable);exhibits[name]=turntable;
+ }
  const environment=createStudio(renderer);scene.environment=environment.texture;scene.environmentIntensity=.75;
  scene.add(new T.HemisphereLight(0xd6e2ee,0x292017,.65));
  const key=new T.DirectionalLight(0xffe6ce,3.1);key.position.set(-3,6,7);scene.add(key);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=5;key.shadow.camera.bottom=-5;key.shadow.normalBias=.025;key.shadow.bias=-.0002;
@@ -55158,7 +55372,7 @@ if(renderer){
  const floor=new T.Mesh(new T.PlaneGeometry(40,40),new T.ShadowMaterial({opacity:.24}));floor.rotation.x=-Math.PI/2;floor.position.y=-2.1;floor.receiveShadow=true;scene.add(floor);
  const field=new T.Group();stator.add(field);
  for(let k=0;k<4;k++){const x=(k-1.5)*.31,curve=new T.CatmullRomCurve3([new T.Vector3(x,.72,0),new T.Vector3(x,0,.57),new T.Vector3(x,-.72,0),new T.Vector3(x,0,-.57)],true);const line=new T.Mesh(new T.TubeGeometry(curve,48,.007,4,true),new T.MeshBasicMaterial({color:0x6bcbe5,transparent:true,opacity:.3,depthWrite:false}));field.add(line)}field.visible=false;
- const states=[
+ const originalStates=[
  {e:0,h:0,r:-.22,y:-.58,z:-.14,label:'CONJUNTO COMPLETO'},
  {e:0,h:1.1,r:.12,y:-.48,z:0,label:'BASE CC · CAMPO + CORRENTE = TORQUE'},
  {e:1,h:1,r:.18,y:-.35,z:.10,label:'VISTA EXPLODIDA'},
@@ -55168,27 +55382,72 @@ if(renderer){
  {e:.08,h:1.3,r:.1,y:-.4,z:0,label:'CAMPO E ARMADURA EM SÉRIE'},
  {e:0,h:1.1,r:.1,y:.5,z:.08,label:'CA / CC · MESMO SENTIDO DE TORQUE'},
  {e:0,h:0,r:-.22,y:-.58,z:-.14,label:'CONJUNTO COMPLETO'}];
- let width=0,height=0,spin=0,previous=0,current=0,chapter=-1;
+ const originalIds=['inicio','corrente-continua','explodida','estator','rotor','contato','serie','universal','fim'];
+ const states=sections.map(s=>{const i=originalIds.indexOf(s.id);return i>=0?originalStates[i]:{e:0,h:0,r:.12,y:-.6,z:-.08,label:s.querySelector('h2').textContent}});
+ let width=0,height=0,spin=0,previous=0,current=0,chapter=-1,assemblyE=0,assemblyH=0,centerBlend=0;
+ const explodedLabels=document.getElementById('exploded-labels'),leaderSVG=explodedLabels.querySelector('svg');
+ const definitions=[['Carcaça',halves[0],[0,.8,0],.48,.29],['Estator',stator,[0,1,0],.76,.36],['Rotor / armadura',rotor,[0,.55,0],.25,.37],['Eixo',rotor,[-2.3,0,0],.15,.48],['Comutador',comm,[1.5,.3,0],.7,.68],['Conjunto de escovas',brushGroups[1],[1.5,1,0],.8,.52],['Tampas / mancais',ends[0],[-1.51,.8,0],.2,.65],['Rolamentos',ends[1],[2,.22,0],.82,.63],['Ventilador',rotor,[-1.25,.75,0],.39,.76]];
+ const annotations=definitions.map(([name,object,point,x,y])=>{const label=document.createElement('span');label.textContent=name;explodedLabels.append(label);const line=document.createElementNS('http://www.w3.org/2000/svg','line');leaderSVG.append(line);return {label,line,object,point:new T.Vector3(...point),x,y}});
+ const poleLabels=document.getElementById('pole-labels'),poleNodes=['stator-pole-a','stator-pole-b'].map(id=>document.getElementById(id));
+ const projection=new T.Vector3();
+ function placePoleLabels(){camera.updateMatrixWorld();comparison.g.updateWorldMatrix(true,true);comparison.markers.forEach((marker,i)=>{projection.copy(marker.point);comparison.g.localToWorld(projection);projection.project(camera);const node=poleNodes[i];node.textContent=marker.pole+' · '+'estator';node.style.left=((projection.x*.5+.5)*width)+'px';node.style.top=((-projection.y*.5+.5)*height)+'px';node.style.color=marker.pole==='N'?'#ff927a':'#80ccff'})}
+ function placeExplodedLabels(){root.updateWorldMatrix(true,true);camera.updateMatrixWorld();leaderSVG.setAttribute('viewBox','0 0 '+width+' '+height);const rows=[0,0];for(const item of annotations){const mobile=width<760;const x=mobile?(item.x<.5?.2:.8):item.x,y=mobile?.30+rows[item.x<.5?0:1]++*.105:item.y;item.label.style.left=x*width+'px';item.label.style.top=y*height+'px';projection.copy(item.point);item.object.localToWorld(projection);projection.project(camera);item.line.setAttribute('x1',x*width);item.line.setAttribute('y1',y*height+9);item.line.setAttribute('x2',(projection.x*.5+.5)*width);item.line.setAttribute('y2',(-projection.y*.5+.5)*height)}}
  const component=document.querySelector('#component'),progress=document.querySelector('#progress');
  function resize(){width=innerWidth;height=innerHeight;renderer.setSize(width,height);camera.aspect=width/height;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
  function animate(ms){requestAnimationFrame(animate);const dt=Math.min((ms-previous)/1000,.05);previous=ms;if(document.hidden)return;
  let sectionIndex=0;while(sectionIndex<sections.length-1&&scrollY>=sections[sectionIndex+1].offsetTop)sectionIndex++;
  const start=sections[sectionIndex].offsetTop,end=sections[sectionIndex+1]?.offsetTop??start+sections[sectionIndex].offsetHeight;
- const target=clamp(sectionIndex+(scrollY-start)/Math.max(1,end-start),0,states.length-1);current=reduce.matches?target:lerp(current,target,1-Math.exp(-dt*6));const index=Math.min(states.length-2,Math.floor(current)),f=smooth(current-index),a=states[index],b=states[index+1];const v=k=>lerp(a[k],b[k],f),next=Math.round(current);
- if(next!==chapter){chapter=next;[...nav.children].forEach((n,i)=>n.setAttribute('aria-current',String(i===chapter)));component.textContent=states[chapter].label}
+ const target=clamp(sectionIndex+(scrollY-start)/Math.max(1,end-start),0,states.length-1);current=reduce.matches?target:lerp(current,target,1-Math.exp(-dt*6));const index=Math.min(states.length-2,Math.floor(current)),f=smooth(current-index),a=states[index],b=states[index+1];const v=k=>lerp(a[k],b[k],f),next=syncChapter();
+ if(next!==chapter){chapter=next;userRotation.identity();manualSign=null;[...nav.children].forEach((n,i)=>n.setAttribute('aria-current',String(i===chapter)));component.textContent=states[chapter].label}
  progress.style.width=(scrollY/Math.max(1,document.documentElement.scrollHeight-height)*100)+'%';
  const sectionId=sections[chapter].id;
+ const lesson=sections[chapter].dataset.lesson;
+ const partId=sections[chapter].dataset.part;root.visible=!partId&&!lesson;exhibitRoot.visible=!!partId;
+ comparison.root.visible=!!lesson;comparisonUI.hidden=!lesson;document.body.classList.toggle('comparison-mode',!!lesson);
+ for(const [name,exhibit] of Object.entries(exhibits))exhibit.visible=name===partId;
  if(!paused)spin+=dt*(sectionId==='universal'?1.2:.24);rotor.rotation.x=spin;comm.rotation.x=spin;
- const e=v('e'),h=v('h');
+ const assembly=sections[chapter].dataset.assembly,exploded=assembly==='exploded',ease=reduce.matches?1:1-Math.exp(-dt*4);
+ assemblyE=lerp(assemblyE,exploded?1.35:0,ease);assemblyH=lerp(assemblyH,exploded?1.2:0,ease);centerBlend=lerp(centerBlend,assembly?1:0,ease);
+ const e=assemblyE,h=assemblyH;
+ document.body.classList.toggle('assembly-mode',!!assembly);explodedLabels.hidden=!exploded;poleLabels.hidden=!lesson;
  // Commutator stays attached to the armature during axial extraction.
  rotor.position.x=-e*1.65;comm.position.x=rotor.position.x;brushes.position.x=-e*.5;
  brushGroups.forEach(g=>g.position.y=g.userData.sign*e*.4);
  ends[0].position.x=-e*2.3;ends[1].position.x=e*1.25;
  halves[0].position.y=h*1.55;halves[1].position.y=-h*1.55;
  shell.visible=h<1.45;
- root.rotation.set(v('r'),v('y'),v('z'));const mobile=width<760;root.position.set(mobile?0:2.65,mobile?-1.8:0,0);
- const scale=mobile?Math.min(width/790,.7):Math.min(width/1500,.98);root.scale.setScalar(scale);floor.visible=!mobile;
+ root.rotation.set(v('r'),v('y'),v('z'));const mobile=width<760;root.position.set(mobile?0:2.65*(1-centerBlend),mobile?lerp(-1.8,-.35,centerBlend):-.35*centerBlend,0);
+ const scale=mobile?Math.min(width/790,.7):Math.min(width/1500,.98);const assemblyScale=Math.min(1.2*(1-.42*clamp(e/1.35)),14*Math.tan(16*Math.PI/180)*width/height*.78/(2.9+e*2.15));root.scale.setScalar(lerp(scale,assemblyScale,centerBlend));floor.visible=!mobile&&!assembly;
+ exhibitRoot.position.copy(root.position);exhibitRoot.scale.setScalar(scale);
+ exhibitRoot.rotation.set(.16,-.65+(reduce.matches?0:Math.sin(spin*.65)*.35),-.1);
+ root.quaternion.premultiply(userRotation);exhibitRoot.quaternion.premultiply(userRotation);
+ if(exploded)placeExplodedLabels();
  field.visible=['corrente-continua','estator','serie','universal'].includes(sectionId);
+ if(lesson){
+  if(!paused&&!reduce.matches){lessonTime+=dt;manualSign=null}
+  const ac=lesson!=='dc',sign=manualSign??(Math.sin(lessonTime*Math.PI*.65)>=0?1:-1);
+  const values=comparison.update(lesson,sign,lessonTime,userRotation,width,height,dt,reduce.matches);
+  placePoleLabels();
+  const universal=['series','result'].includes(lesson),fieldSign=universal?values.current:1,torque=universal?1:values.current;
+  ui['field-label'].textContent=universal?'ELETROÍMÃS':'ÍMÃS FIXOS';
+  ui['field-sign'].textContent=fieldSign>0?'N · S':'S · N';
+  ui['field-sign'].style.color=fieldSign>0?'#ee987f':'#74bfea';
+  ui['torque-sign'].textContent=torque>0?'↻':'↺';ui['torque-sign'].style.color=torque>0?'#edb77f':'#74bfea';
+  ui['current-sign'].textContent=values.current>0?'→ +':'← −';
+  ui['supply-label'].textContent=ac?'CA · 60 Hz':'CC';halfCycle.hidden=!ac;
+  document.getElementById('series-path').hidden=!universal;
+  ui['animation-note'].textContent=lesson==='acproblem'?'Seta = torque. O eixo não acompanha cada inversão.':ac?'Câmera lenta · torque esquemático':'Ímãs permanentes · motor com escovas';
+  signalCtx.clearRect(0,0,600,100);signalCtx.lineWidth=2;signalCtx.strokeStyle='#52606a';signalCtx.beginPath();signalCtx.moveTo(0,50);signalCtx.lineTo(600,50);signalCtx.stroke();
+  signalCtx.lineWidth=5;signalCtx.strokeStyle=values.current>0?'#edb77f':'#74bfea';signalCtx.beginPath();
+  const signalPhase=manualSign===null?lessonTime*Math.PI*.65:manualSign*Math.PI/2;
+  for(let x=0;x<=600;x++){const y=ac?50-34*Math.sin((x-450)/90+signalPhase):18;x?signalCtx.lineTo(x,y):signalCtx.moveTo(x,y)}signalCtx.stroke();
+  const dotY=ac?50-34*Math.sin(signalPhase):18;
+  signalCtx.fillStyle='#fff';signalCtx.beginPath();signalCtx.arc(450,dotY,9,0,Math.PI*2);signalCtx.fill();
+  floor.visible=false;
+ }
+ const isFinale=sectionId==='rock';document.body.classList.toggle('finale-mode',isFinale);
+ finale.update(isFinale,dt,width,height,paused,reduce.matches);
+ if(isFinale){root.position.set(0,-1.2,1);root.scale.setScalar(Math.min(.98,width/height*.72));root.rotation.set(.14,-.45+Math.sin(spin*.3)*.08,-.08);root.quaternion.premultiply(userRotation);floor.visible=false;field.visible=false}
  renderer.render(scene,camera);
  }requestAnimationFrame(animate);
  document.querySelector('canvas').addEventListener('webglcontextlost',e=>{e.preventDefault();document.querySelector('#fallback').hidden=false});
